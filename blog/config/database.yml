@@ -1,0 +1,18 @@
+development:
+  adapter: mysql2
+  database: library_development
+  username: sysadmin
+  password: Changem3
+  host: localhost
+test:
+  adapter: mysql2
+  database: library_test
+  username: sysadmin
+  password: Changem3
+  host: localhost
+production:
+  adapter: mysql2
+  database: library_production
+  username: sysadmin
+  password: Changem3
+  host: localhost

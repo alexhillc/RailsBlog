@@ -1,13 +1,9 @@
 Readme
 
-R Spec:
+Built In (MiniTest):
 
-http://rspec.info/
-
-Minitest:
-
-https://github.com/seattlerb/minitest
-
-Built In:
-
+Guide
 http://guides.rubyonrails.org/testing.html
+
+MiniTest Docs
+https://github.com/seattlerb/minitest

@@ -1,5 +1,5 @@
 Readme
 
-Security Reccomendations will comply with the following:
+Security Recommendations will comply with the following:
 
 http://guides.rubyonrails.org/security.html

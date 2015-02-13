@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+
+<style>
+@import "http://fonts.googleapis.com/css?family=Raleway";
+/*----------------------------------------------
+CSS settings for HTML div Exact Center
+------------------------------------------------*/
+#abc {
+width:100%;
+height:100%;
+opacity:.95;
+top:0;
+left:0;
+display:none;
+position:fixed;
+background-color:#313131;
+overflow:auto
+}
+img#close {
+position:absolute;
+right:-14px;
+top:-14px;
+cursor:pointer
+}
+div#popupContact {
+position:absolute;
+left:50%;
+top:17%;
+margin-left:-202px;
+font-family:'Raleway',sans-serif
+}
+form {
+max-width:300px;
+min-width:250px;
+padding:10px 50px;
+border:2px solid gray;
+border-radius:10px;
+font-family:raleway;
+background-color:#fff
+}
+p {
+margin-top:30px
+}
+h2 {
+background-color:#FEFFED;
+padding:20px 35px;
+margin:-10px -50px;
+text-align:center;
+border-radius:10px 10px 0 0
+}
+hr {
+margin:10px -50px;
+border:0;
+border-top:1px solid #ccc
+}
+input[type=text] {
+width:82%;
+padding:10px;
+margin-top:30px;
+border:1px solid #ccc;
+padding-left:40px;
+font-size:16px;
+font-family:raleway
+}
+#name {
+background-image:url(../images/name.jpg);
+background-repeat:no-repeat;
+background-position:5px 7px
+}
+#email {
+background-image:url(../images/email.png);
+background-repeat:no-repeat;
+background-position:5px 7px
+}
+textarea {
+background-image:url(../images/msg.png);
+background-repeat:no-repeat;
+background-position:5px 7px;
+width:82%;
+height:95px;
+padding:10px;
+resize:none;
+margin-top:30px;
+border:1px solid #ccc;
+padding-left:40px;
+font-size:16px;
+font-family:raleway;
+margin-bottom:30px
+}
+#submit {
+text-decoration:none;
+width:100%;
+text-align:center;
+display:block;
+background-color:#FFBC00;
+color:#fff;
+border:1px solid #FFCB00;
+padding:10px 0;
+font-size:20px;
+cursor:pointer;
+border-radius:5px
+}
+span {
+color:red;
+font-weight:700
+}
+button {
+height:45px;
+border-radius:3px;
+background-color:#cd853f;
+color:#fff;
+font-family:'Raleway',sans-serif;
+font-size:18px;
+cursor:pointer
+}
+</style>
+</head>
+
+<body id="body" style="overflow:hidden;">
+<button type="button" id="undo">Undo</button>
+<button type="button" id="redo">Redo</button>
+<!-- <button type="button" id="save">Save</button>
+<button type="button" id="load">Load</button> -->
+<button onclick="serialize_graph()">Save</button>
+<button onclick="deserialize_graph()">Load</button>
+
+<p>Double Click shape to edit.</p>
+<div id="paper"> </div>
+<div id="abc">
+<!-- Popup Div Starts Here -->
+<div id="popupContact">
+<!-- Contact Us Form -->
+<form action="#" id="form" method="post" name="form">
+<img id="close" src="https://dl.dropboxusercontent.com/u/43615815/close.png" onclick ="div_hide()">
+<h2>Box Info:</h2>
+<hr>Text:
+<input id="name" name="name" placeholder="Name" type="text">
+<a id="submit" onClick="div_hide()">Update</a>
+</form>
+</div>
+<!-- Popup Div Ends Here -->
+</div>
+<script>
+var uID;
+var jsonString;
+var graph = new joint.dia.Graph;
+
+var paper = new joint.dia.Paper({
+    el: $('#paper'),
+    width: 800,
+    height: 600,
+    gridSize: 1,
+    model: graph
+});
+
+var commandManager = new joint.dia.CommandManager({ graph: graph });
+
+var erd = joint.shapes.erd;
+
+var element = function(elm, x, y, label) {
+    var cell = new elm({ position: { x: x, y: y }, attrs: { text: { text: label }}});
+    graph.addCell(cell);
+    return cell;
+};
+var myLink;
+var link = function(elm1, elm2) {
+    myLink = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
+		connector: { name: 'smooth' },
+		attrs: {
+        '.connection': {
+            stroke: '#333333',
+            'stroke-width': 3
+        },
+        '.marker-target': {
+            fill: '#333333',
+            d: 'M 10 0 L 0 5 L 10 10 z'
+        }
+    }
+		});
+    graph.addCell(myLink);
+    return myLink;
+};
+
+var myLink2;
+var link2 = function(elm1, elm2) {
+    myLink2 = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
+		connector: { name: 'smooth' },
+		attrs: {
+        '.connection': {
+            stroke: '#333333',
+            'stroke-width': 3
+        }
+    }
+		});
+    graph.addCell(myLink2);
+    return myLink2;
+};
+
+var rec1 = element(erd.Entity, 10, 125, "Sally sees dirty dishes");//rectangle
+var rec2 = element(erd.Entity, 170, 100, "Bill hates doing dishes");
+var rec3 = element(erd.Entity, 340, 100, "He's mad");
+var rec4 = element(erd.Entity, 450, 200, "He will smoke pot");
+
+var rec6 = element(erd.Entity, 225, 10, "I hate doing dishes");//rectangle
+var rec7 = element(erd.Entity, 630, 25, "I want a joint");
+var rec8 = element(erd.Entity, 20, 515, "She needs a joint");
+var rec9 = element(erd.Entity, 630, 100, "Stash is in the garage");
+var rec10 = element(erd.Entity, 480, 530, "I'll stay until she is calm");
+var rec11 = element(erd.Entity, 300, 530, "Hears Sally's anger");
+
+var dia1 = element(erd.Relationship, 0, 10, "Angry");//diamond
+var dia2 = element(erd.Relationship, 220, 200, "Angry");
+var dia3 = element(erd.Relationship, 250, 430, "Calm");
+
+var dia4 = element(erd.Relationship, 400, 10, "Angry");
+var dia5 = element(erd.Relationship, 200, 515, "Worried");
+
+var ov1 = element(erd.Normal, 100, 5, "Orders Bill wash");//oval
+var ov2 = element(erd.Normal, 320, 200, "Yells don't smoke");
+var ov3 = element(erd.Normal, 320, 300, "Goes to garage");
+var ov10 = element(erd.Normal, 150, 357, "Puffs joint");
+
+var ov4 = element(erd.Normal, 500, 25, "Grimaces");
+var ov5 = element(erd.Normal, 650, 175, "Goes to garage");
+var ov6 = element(erd.Normal, 650, 250, "Ignores Sally");
+var ov7 = element(erd.Normal, 650, 530, "Puffs joint");
+var ov8 = element(erd.Normal, 50, 430, "Offers joint");
+var ov9 = element(erd.Normal, 50, 357, "Puffs joint");
+
+//#0099FF//blue
+//#33CC33//green
+rec11.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});
+rec11.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+}); 
+rec10.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+}); 
+rec9.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+}); 
+rec8.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+}); 
+rec7.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+}); 
+rec6.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});
+dia4.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+}); 
+dia5.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});
+ov4.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});
+ov5.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});  
+ov6.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});  
+ov7.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});  
+ov8.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});  
+ov9.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});     
+////////////////////////////////////////////////////////////
+rec1.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+rec2.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+rec3.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+rec4.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+ov1.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+ov2.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+ov3.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+});
+ov10.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+});  
+dia1.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+dia2.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+dia3.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+
+
+link(rec1,dia1);
+link(dia1,ov1);
+link(ov1,rec6);
+link(ov1,rec2);
+link(rec6,dia4);
+link(dia4,ov4);
+link(ov4,rec7);
+link(rec7,rec9);
+link(rec9,ov5);
+link(ov5,ov6);
+link(ov6,ov7);
+link(ov7,rec10);
+link(rec10,rec11);
+link(rec11,dia5);
+link(dia5,rec8);
+link(rec8,ov8);
+link(ov8,ov9);
+link(rec2,rec3);
+link(rec3,rec4);
+link(rec4,ov2);
+link(ov2,dia2);
+link(dia2,ov3);
+link(ov3,dia3);
+link(dia3,ov10);
+
+link2(rec3,ov4);
+link2(ov3,rec11);
+link2(dia3,ov8);
+
+$('#undo').on('click', _.bind(commandManager.undo, commandManager));
+$('#redo').on('click', _.bind(commandManager.redo, commandManager));
+
+function changeText(){
+var textBoxText = document.getElementById("textBox").value;
+employee.attr({
+    text: { text: textBoxText}
+});
+}
+
+paper.on('cell:pointerdblclick', 
+    function(cellView, evt, x, y) { 
+		var elm = graph.getCell(cellView.model.id);
+		var txt = elm.attr('text/text');
+		document.getElementById("name").value = txt;
+		uID = cellView.model.id;
+		div_show();
+        //alert('cell view ' + cellView.model.id + ' was clicked \r\n It contains the text: ' + txt);
+    }
+);
+
+function changeText2(){
+var textBoxText = document.getElementById("name").value;
+var elm = graph.getCell(uID);
+elm.attr({
+    text: { text: textBoxText}
+});
+}
+
+//Function To Display Popup
+function div_show() {
+document.getElementById('abc').style.display = "block";
+}
+//Function to Hide Popup
+function div_hide(){
+document.getElementById('abc').style.display = "none";
+changeText2();
+}
+
+//Function to serialize graph
+function serialize_graph(){
+jsonString = JSON.stringify(graph.toJSON());
+console.log(jsonString);
+}
+
+//Function to deserialize graph
+function deserialize_graph(){
+graph.fromJSON(JSON.parse(jsonString));
+}
+</script>
+
+</body>
+</html>
+

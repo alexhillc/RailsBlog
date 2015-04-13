@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<!-- Modal for square and oval -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edit Shape</h4>
+      </div>
+      <div class="modal-body">
+		<div class="form-group">
+			<label for="name">Text:</label>
+			<textarea class="form-control" rows="2" id="name" name="name"></textarea>
+		</div>
+		<div class="form-group">
+			<form role="form">
+				<label class="radio-inline">
+					<input type="radio" name="optradio" id="red">Red
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="optradio" id="yellow">Yellow
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="optradio" id="blue">Blue
+					</label>
+					<br>
+				<label class="radio-inline">
+					<input type="radio" name="optradio" id="orange">Orange
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="optradio" id="green" checked>Green
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="optradio" id="violet">Violet
+					</label>
+			</form>
+		</div>
+			<br><button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Advanced <span class="glyphicon glyphicon-chevron-down"></span></button>
+			<div class="collapse" id="collapseExample"><br>
+				<div class="well">
+					<div class="form-group">
+						<label for="comments">Comments:</label>
+						<textarea class="form-control" rows="4" id="comments" name="comments">Comments are not currently saved but will be in the future!</textarea>
+					</div>
+				</div>
+			</div>
+      </div>
+      <div class="modal-footer">
+		<div style="float:left;color:#737373;line-height: 34px;">
+			<button type="button" class="btn btn-danger" onclick="remove_shape()">Delete</button>
+		</div>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="div_hide()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for diamond -->
+<div class="modal fade" id="diaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edit Shape</h4>
+      </div>
+      <div class="modal-body">
+		<div class="form-group">
+			<label for="name">Feelings:</label><br>
+			<input type="checkbox" value="" id="angry">Angry
+			<input type="checkbox" value="" id="sad">Sad
+			<input type="checkbox" value="" id="happy">Happy<br>
+			<input type="checkbox" value="" id="confused">Confused
+			<input type="checkbox" value="" id="scared">Scared
+		</div>
+
+		<div class="form-group">
+			<form role="form">
+				<label class="radio-inline">
+					<input type="radio" name="optradio" id="red2">Red
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="optradio" id="yellow2">Yellow
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="optradio" id="blue2">Blue
+					</label>
+					<br>
+				<label class="radio-inline">
+					<input type="radio" name="optradio" id="orange2">Orange
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="optradio" id="green2" checked>Green
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="optradio" id="violet2">Violet
+					</label>
+			</form>
+		</div>
+		<br><button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">Advanced <span class="glyphicon glyphicon-chevron-down"></span></button>
+			<div class="collapse" id="collapseExample2"><br>
+				<div class="well">
+					<div class="form-group">
+						<label for="comments">Comments:</label>
+						<textarea class="form-control" rows="4" id="comments" name="comments">Comments are not currently saved but will be in the future!</textarea>
+					</div>
+				</div>
+			</div>
+      </div>
+      <div class="modal-footer">
+		<div style="float:left;color:#737373;line-height: 34px;">
+			<button type="button" class="btn btn-danger" onclick="remove_dia()">Delete</button>
+		</div>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="div_hide2()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      <nav class="navbar navbar-default navbar-static-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Family Map</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+			<li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">File</a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">New</a></li>
+                  <li><a href="#" onclick="serialize_graph()">Save</a></li>
+                  <li><a href="#" onclick="deserialize_graph()">Load</a></li>
+                  <li class="divider"></li>
+                  <li class="dropdown-header">Export</li>
+                  <li><a href="#">PDF</a></li>
+                  <li><a href="#">JPEG</a></li>
+                </ul>
+              </li>
+            </ul>
+				<button type="button" class="btn btn-default navbar-btn" onclick="add_oval()">Oval</button>
+				<button type="button" class="btn btn-default navbar-btn" onclick="add_diamond()">Diamond</button>
+				<button type="button" class="btn btn-default navbar-btn" onclick="add_square()">Square</button>
+            <ul class="nav navbar-nav navbar-right">
+				<button type="button" class="btn btn-default navbar-btn" id="undo"> Undo</button>
+				<button type="button" class="btn btn-default navbar-btn" id="redo"> Redo</button>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+
+<div class="container-fluid">
+  <div class="row">
+	
+    <div class="col-sm-12" style="background-color:#E0E0EB;">
+	
+	<div id="paper"> </div>
+	
+	</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+var uID;
+var jsonString;
+var graph = new joint.dia.Graph;
+
+var paper = new joint.dia.Paper({
+    el: $('#paper'),
+    width: (screen.width-50),
+    height: (screen.height-100),
+    gridSize: 1,
+	perpendicularLinks: false,
+	linkConnectionPoint: joint.util.shapePerimeterConnectionPoint,
+    model: graph
+});
+
+var commandManager = new joint.dia.CommandManager({ graph: graph });
+var erd = joint.shapes.erd;
+
+var element = function(elm, x, y, label) {
+    var cell = new elm({ position: { x: x, y: y }, attrs: { text: { text: label }}});
+    graph.addCell(cell);
+    return cell;
+};
+
+var myLink;
+var link = function(elm1, elm2) {
+    myLink = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
+		connector: { name: 'smooth' },
+		attrs: {
+        '.connection': {
+            stroke: '#333333',
+            'stroke-width': 3
+        },
+        '.marker-target': {
+            fill: '#333333',
+            d: 'M 10 0 L 0 5 L 10 10 z'
+        }
+    }
+		});
+    graph.addCell(myLink);
+    return myLink;
+};
+
+var myLink2;
+var link2 = function(elm1, elm2) {
+    myLink2 = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
+		connector: { name: 'smooth' },
+		attrs: {
+        '.connection': {
+            stroke: '#333333',
+            'stroke-width': 3
+        }
+    }
+		});
+    graph.addCell(myLink2);
+    return myLink2;
+};
+/*
+var rec1 = element(erd.Entity, 10, 125, "Sally sees dirty dishes");//rectangle
+var rec2 = element(erd.Entity, 170, 100, "Bill hates doing dishes");
+var rec3 = element(erd.Entity, 340, 100, "He's mad");
+var rec4 = element(erd.Entity, 450, 200, "He will smoke pot");
+
+var rec6 = element(erd.Entity, 225, 10, "I hate doing dishes");//rectangle
+var rec7 = element(erd.Entity, 630, 25, "I want a joint");
+var rec8 = element(erd.Entity, 20, 515, "She needs a joint");
+var rec9 = element(erd.Entity, 630, 100, "Stash is in the garage");
+var rec10 = element(erd.Entity, 480, 530, "I'll stay until she is calm");
+var rec11 = element(erd.Entity, 300, 530, "Hears Sally's anger");
+
+var dia1 = element(erd.Relationship, 0, 10, "Angry");//diamond
+var dia2 = element(erd.Relationship, 220, 200, "Angry");
+var dia3 = element(erd.Relationship, 250, 430, "Calm");
+
+var dia4 = element(erd.Relationship, 400, 10, "Angry");
+var dia5 = element(erd.Relationship, 200, 515, "Worried");
+
+var ov1 = element(erd.Normal, 100, 5, "Orders Bill wash");//oval
+var ov2 = element(erd.Normal, 320, 200, "Yells don't smoke");
+var ov3 = element(erd.Normal, 320, 300, "Goes to garage");
+var ov10 = element(erd.Normal, 150, 357, "Puffs joint");
+
+var ov4 = element(erd.Normal, 500, 25, "Grimaces");
+var ov5 = element(erd.Normal, 650, 175, "Goes to garage");
+var ov6 = element(erd.Normal, 650, 250, "Ignores Sally");
+var ov7 = element(erd.Normal, 650, 530, "Puffs joint");
+var ov8 = element(erd.Normal, 50, 430, "Offers joint");
+var ov9 = element(erd.Normal, 50, 357, "Puffs joint");
+
+//#0099FF//blue
+//#33CC33//green
+rec11.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});
+rec11.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+}); 
+rec10.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+}); 
+rec9.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+}); 
+rec8.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+}); 
+rec7.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+}); 
+rec6.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});
+dia4.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+}); 
+dia5.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});
+ov4.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});
+ov5.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});  
+ov6.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});  
+ov7.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});  
+ov8.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});  
+ov9.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});     
+////////////////////////////////////////////////////////////
+rec1.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//blue
+}); 
+rec2.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+rec3.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+rec4.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+ov1.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+ov2.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+ov3.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+});
+ov10.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+});  
+dia1.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+dia2.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+dia3.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//green
+}); 
+
+
+link(rec1,dia1);
+link(dia1,ov1);
+link(ov1,rec6);
+link(ov1,rec2);
+link(rec6,dia4);
+link(dia4,ov4);
+link(ov4,rec7);
+link(rec7,rec9);
+link(rec9,ov5);
+link(ov5,ov6);
+link(ov6,ov7);
+link(ov7,rec10);
+link(rec10,rec11);
+link(rec11,dia5);
+link(dia5,rec8);
+link(rec8,ov8);
+link(ov8,ov9);
+link(rec2,rec3);
+link(rec3,rec4);
+link(rec4,ov2);
+link(ov2,dia2);
+link(dia2,ov3);
+link(ov3,dia3);
+link(dia3,ov10);
+
+link2(rec3,ov4);
+link2(ov3,rec11);
+link2(dia3,ov8);
+*/
+
+/* EXAMPLES OF ADDING NEW CUSTOM SHAPES
+var textBlock = new joint.shapes.basic.TextBlockC({
+                position: { x:100, y:100 },
+				size: { width: 170, height: 80 },
+                content: "<p>Goes to garage and yells all you care about is pot</p>"
+        });
+graph.addCell(textBlock);
+
+var textBlock2 = new joint.shapes.basic.TextBlock({
+                position: { x:300, y:300 },
+				size: { width: 170, height: 80 },
+                content: "<p>Goes to garage and yells all you care about is pot and I don't even like you anymore you uggo</p>"
+        });
+graph.addCell(textBlock2);
+
+var textBlock3 = new joint.shapes.basic.TextBlockD({
+                position: { x:500, y:500 },
+				size: { width: 100, height: 100 },
+                content: "<p>Confused + Scared</p>"
+        });
+graph.addCell(textBlock3);
+
+var ttt = textBlock.prop('type');
+///alert(ttt);
+//textBlock.prop('content', "<p>Test test</p>");
+*/
+
+$('#undo').on('click', _.bind(commandManager.undo, commandManager));
+$('#redo').on('click', _.bind(commandManager.redo, commandManager));
+
+paper.on('cell:pointerdblclick', 
+    function(cellView, evt, x, y) { 
+		var elm = graph.getCell(cellView.model.id);
+		var txt = elm.prop('content');
+		var res = txt.replace("<p>", "");
+		var fin = res.replace("</p>", "");
+		
+		var type = elm.prop('type');
+		if (type=='basic.TextBlock')
+		{
+			document.getElementById("name").value = fin;
+			uID = cellView.model.id;
+			div_show();
+		}else if(type=='basic.TextBlockD')
+		{
+			uID = cellView.model.id;
+			var sadCheck = elm.prop('sad');
+			var angryCheck = elm.prop('angry');
+			var scaredCheck = elm.prop('scared');
+			var happyCheck = elm.prop('happy');
+			var confusedCheck = elm.prop('confused');
+			
+			document.getElementById("sad").checked = false;
+			document.getElementById("angry").checked = false;
+			document.getElementById("scared").checked = false;
+			document.getElementById("happy").checked = false;
+			document.getElementById("confused").checked = false;
+			
+			if(sadCheck=='t'){
+				document.getElementById("sad").checked = true;}
+			if(angryCheck=='t'){
+				document.getElementById("angry").checked = true;}
+			if(scaredCheck=='t'){
+				document.getElementById("scared").checked = true;}
+			if(happyCheck=='t'){
+				document.getElementById("happy").checked = true;}
+			if(confusedCheck=='t'){
+				document.getElementById("confused").checked = true;}
+			
+			$('#diaModal').modal('show');
+		}
+		else
+		{
+			document.getElementById("name").value = fin;
+			uID = cellView.model.id;
+			div_show();
+		}
+    }
+);
+
+paper.on('cell:pointerup', function(cellView, evt, x, y) {
+
+    // Find the first element below that is not a link nor the dragged element itself.
+    var elementBelow = graph.get('cells').find(function(cell) {
+        if (cell instanceof joint.dia.Link) return false; // Not interested in links.
+        if (cell.id === cellView.model.id) return false; // The same element as the dropped one.
+        if (cell.getBBox().containsPoint(g.point(x, y))) {
+            return true;
+        }
+        return false;
+    });
+    
+    // If the two elements are connected already, don't
+    // connect them again (this is application specific though).
+    if (elementBelow && !_.contains(graph.getNeighbors(elementBelow), cellView.model)) {
+/*
+        graph.addCell(new joint.dia.Link({
+            source: { id: cellView.model.id }, target: { id: elementBelow.id },
+            attrs: { '.marker-source': { d: 'M 10 0 L 0 5 L 10 10 z' } }
+        }));
+	*/	
+		var s = graph.getCell(cellView.model.id);
+		var t = graph.getCell(elementBelow.id);
+		link(t,s);
+		
+		var sx = s.prop('position/x');
+		var sy = s.prop('position/y');
+		//alert(sx+sy);
+        // Move the element a bit to the side.
+		if(sx>1000)
+		{
+			s.translate(-200, 0);
+		}
+		else
+		{
+			s.translate(200, 0);
+		}
+    }
+});
+
+function changeText2(){
+var textBoxText = document.getElementById("name").value;
+var elm = graph.getCell(uID);
+var fullText = "<p>"+textBoxText+"</p>";
+elm.prop('content',fullText);
+//elm.attr({
+//    text: { text: textBoxText}
+//});
+}
+
+//Function To Display Popup
+function div_show() {
+$('#myModal').modal('show');
+}
+//Function to Hide Popup
+function div_hide(){
+changeText2();
+var elm = graph.getCell(uID);
+var type = elm.prop('type');
+
+if(type=="basic.TextBlock")
+{
+
+if(document.getElementById('green').checked) {
+  elm.attr({
+    rect: { fill: '#33CC33', stroke: '#29A329' }//green
+});
+}else if(document.getElementById('blue').checked) {
+  elm.attr({
+    rect: { fill: '#00CCFF', stroke: '#00A3CC' }//blue
+}); 
+}else if(document.getElementById('red').checked) {
+  elm.attr({
+    rect: { fill: '#FF3333', stroke: '#FF0000' }//red
+}); 
+}else if(document.getElementById('violet').checked) {
+  elm.attr({
+    rect: { fill: '#9933FF', stroke: '#7A29CC' }//violet
+}); 
+}else if(document.getElementById('yellow').checked) {
+  elm.attr({
+    rect: { fill: '#FFFF00', stroke: '#CCCC00' }//yellow
+}); 
+}else if(document.getElementById('orange').checked) {
+  elm.attr({
+    rect: { fill: '#FF9900', stroke: '#CC7A00' }//orange
+}); 
+}
+
+$('#myModal').modal('hide');
+}else
+{
+if(document.getElementById('green').checked) {
+  elm.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});
+}else if(document.getElementById('blue').checked) {
+  elm.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//blue
+}); 
+}else if(document.getElementById('red').checked) {
+  elm.attr({
+    '.outer': { fill: '#FF3333', stroke: '#FF0000' }//red
+}); 
+}else if(document.getElementById('violet').checked) {
+  elm.attr({
+    '.outer': { fill: '#9933FF', stroke: '#7A29CC' }//violet
+}); 
+}else if(document.getElementById('yellow').checked) {
+  elm.attr({
+    '.outer': { fill: '#FFFF00', stroke: '#CCCC00' }//yellow
+}); 
+}else if(document.getElementById('orange').checked) {
+  elm.attr({
+    '.outer': { fill: '#FF9900', stroke: '#CC7A00' }//orange
+}); 
+}
+
+$('#myModal').modal('hide');
+}
+
+}
+
+function div_hide2(){
+var numChecked = 0;
+if(document.getElementById('sad').checked){
+	numChecked++;
+}
+if(document.getElementById('angry').checked){
+	numChecked++;
+}
+if(document.getElementById('happy').checked){
+	numChecked++;
+}
+if(document.getElementById('confused').checked){
+	numChecked++;
+}
+if(document.getElementById('scared').checked){
+	numChecked++;
+}
+
+if(numChecked>2){
+	//do something
+	alert("Too many boxes checked");
+	return;
+}
+
+var elm = graph.getCell(uID);
+var textInBox="";
+if(document.getElementById('sad').checked)
+{
+	textInBox+="Sad "
+	elm.prop('sad','t');
+}else
+{
+	elm.prop('sad','f');
+}
+if(document.getElementById('angry').checked)
+{
+	textInBox+="Angry "
+	elm.prop('angry','t');
+}else
+{
+	elm.prop('angry','f');
+}
+if(document.getElementById('happy').checked)
+{
+	textInBox+="Happy "
+	elm.prop('happy','t');
+}else
+{
+	elm.prop('happy','f');
+}
+if(document.getElementById('confused').checked)
+{
+	textInBox+="Confused "
+	elm.prop('confused','t');
+}else
+{
+	elm.prop('confused','f');
+}
+if(document.getElementById('scared').checked)
+{
+	textInBox+="Scared"
+	elm.prop('scared','t');
+}else
+{
+	elm.prop('scared','f');
+}
+
+var fin = "<p>"+textInBox+"</p>";
+elm.prop('content',fin);
+//elm.attr({
+//    text: { text: textInBox}
+//});
+
+if(document.getElementById('green2').checked) {
+  elm.attr({
+    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
+});
+}else if(document.getElementById('blue2').checked) {
+  elm.attr({
+    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//blue
+}); 
+}else if(document.getElementById('red2').checked) {
+  elm.attr({
+    '.outer': { fill: '#FF3333', stroke: '#FF0000' }//red
+}); 
+}else if(document.getElementById('violet2').checked) {
+  elm.attr({
+    '.outer': { fill: '#9933FF', stroke: '#7A29CC' }//violet
+}); 
+}else if(document.getElementById('yellow2').checked) {
+  elm.attr({
+    '.outer': { fill: '#FFFF00', stroke: '#CCCC00' }//yellow
+}); 
+}else if(document.getElementById('orange2').checked) {
+  elm.attr({
+    '.outer': { fill: '#FF9900', stroke: '#CC7A00' }//orange
+}); 
+}
+
+$('#diaModal').modal('hide');
+}
+
+//Function to serialize graph
+function serialize_graph(){
+jsonString = JSON.stringify(graph.toJSON());
+console.log(jsonString);
+}
+
+//Function to deserialize graph
+function deserialize_graph(){
+graph.fromJSON(JSON.parse(jsonString));
+}
+/*
+function add_arrow(){
+	var elm = graph.getCell(uID);
+    var myLink = new erd.Line({ source: { id: elm.id }, 
+		connector: { name: 'smooth' },
+		attrs: {
+        '.connection': {
+            stroke: '#333333',
+            'stroke-width': 3
+        },
+        '.marker-target': {
+            fill: '#333333',
+            d: 'M 10 0 L 0 5 L 10 10 z'
+        }
+    }
+		});
+    graph.addCell(myLink);
+}
+*/
+function add_oval(){
+/*
+	var ov  = element(erd.Normal, 500, 500, "");
+	graph.addCell(ov);
+	//ov.toFront();
+	var txt = ov.attr('text/text');
+	document.getElementById("name").value = txt;
+	uID = ov.id;
+	$('#myModal').modal('show');
+*/
+	var textBlock = new joint.shapes.basic.TextBlockC({
+                position: { x:100, y:100 },
+				size: { width: 170, height: 80 },
+                content: "<p> </p>"
+        });
+	graph.addCell(textBlock);
+	var txt = textBlock.prop('content');
+	var res = txt.replace("<p>", "");
+	var fin = res.replace("</p>", "");
+	document.getElementById("name").value = fin;
+	uID = textBlock.id;
+	$('#myModal').modal('show');
+}
+
+function add_diamond(){
+/*
+	var di  = element(erd.Relationship, 500, 500, "");
+	graph.addCell(di);
+	//ov.toFront();
+	var txt = di.attr('text/text');
+	document.getElementById("name").value = txt;
+	uID = di.id;
+	$('#diaModal').modal('show');
+*/
+
+	document.getElementById("sad").checked = false;
+	document.getElementById("angry").checked = false;
+	document.getElementById("scared").checked = false;
+	document.getElementById("happy").checked = false;
+	document.getElementById("confused").checked = false;
+
+	var textBlock = new joint.shapes.basic.TextBlockD({
+                position: { x:100, y:100 },
+				size: { width: 100, height: 100 },
+                content: "<p> </p>"
+        });
+	graph.addCell(textBlock);
+	var txt = textBlock.prop('content');
+	var res = txt.replace("<p>", "");
+	var fin = res.replace("</p>", "");
+	document.getElementById("name").value = fin;
+	uID = textBlock.id;
+	$('#diaModal').modal('show');
+}
+
+function add_square(){
+/*	var sq  = element(erd.Entity, 500, 500, "");
+	graph.addCell(sq);
+	//ov.toFront();
+	var txt = sq.attr('text/text');
+	document.getElementById("name").value = txt;
+	uID = sq.id;
+	$('#myModal').modal('show');
+	*/
+	var textBlock = new joint.shapes.basic.TextBlock({
+                position: { x:100, y:100 },
+				size: { width: 170, height: 80 },
+                content: "<p> </p>"
+        });
+	graph.addCell(textBlock);
+	var txt = textBlock.prop('content');
+	var res = txt.replace("<p>", "");
+	var fin = res.replace("</p>", "");
+	document.getElementById("name").value = fin;
+	uID = textBlock.id;
+	$('#myModal').modal('show');
+}
+
+function remove_shape()
+{
+	graph.getCell(uID).remove();
+	$('#myModal').modal('hide');
+}
+
+function remove_dia()
+{
+	graph.getCell(uID).remove();
+	$('#diaModal').modal('hide');
+}
+</script>
+</body>
+
+</html>

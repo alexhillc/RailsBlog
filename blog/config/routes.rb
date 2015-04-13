@@ -1,19 +1,26 @@
 Rails.application.routes.draw do
-  resources :posts
+
+  
 
   #get 'welcome/index'
 	resources :articles
 	resources :users
 	resources :mapdemo
+	resources :posts
+	resources :tasks
+	resources :fmaps
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-   root 'welcome#index'
+  	root 'welcome#index'
    
 	get "/log-in" => "sessions#new"
 	post "/log-in" => "sessions#create"
 	get "/log-out" => "sessions#destroy", as: :log_out
+	
+	get '/about' => 'fmaps#about'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

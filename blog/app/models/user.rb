@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
 attr_accessor :password
 validates_confirmation_of :password
+validates :email, uniqueness: true
+validates :password, length: { minimum: 7 }
 before_save :encrypt_password
 def encrypt_password
 	self.password_salt = BCrypt::Engine.generate_salt

@@ -32,6 +32,10 @@ gem 'bcrypt', '~> 3.1.5', require: "bcrypt"
 # Use unicorn as the app server
 # gem 'unicorn'
 
+gem 'simple_form'
+
+gem 'gon'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

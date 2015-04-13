@@ -1,11 +1,22 @@
-<h1>Sign Up</h1>
-<%=form_for User.new do |f| %>
-<%=f.label :email %>
-<%=f.text_field :email %>
-<%=f.label :password %>
-<%=f.password_field :password %>
-<%=f.label :password_confirmation %>
-<%=f.password_field :password_confirmation %>
-<%=f.submit "Sign Up" %>
+<link rel="stylesheet" href="https://dl.dropboxusercontent.com/u/43615815/CSS/bootstrap.css">
+<link rel="stylesheet" href="https://dl.dropboxusercontent.com/u/43615815/CSS/signin.css">
+
+<%=form_for User.new, :html => {:class => "form-signin"} do |f| %>
+	<h2 class="form-signin-heading">Sign Up</h2>
+	<%=f.label :email %>
+	<%=f.text_field :email, :class => 'form-control' %>
+	</br>
+	<%=f.label :password %>
+	<%=f.password_field :password, :class => 'form-control' %>
+	</br>
+	<%=f.label :password_confirmation %>
+	<%=f.password_field :password_confirmation, :class => 'form-control' %>
+	</br>
+	<%=f.submit "Sign Up", :class => 'btn btn-primary' %>
+	
+	<h3>Already have an account?</h3>
+	<%= link_to 'Log In', {:controller => 'sessions', :action => 'new'} %>
+	<div>
+		<br><p><strong>Instructions:</strong> Enter an email and password. The password must be at least eight characters long. The email will be used if cases of forgotten passwords.</p>
+	</div>
 <%end%>
-<%= link_to 'Log In', {:controller => 'sessions', :action => 'new'} %>

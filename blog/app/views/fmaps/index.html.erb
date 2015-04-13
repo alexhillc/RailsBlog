@@ -1,0 +1,65 @@
+<link rel="stylesheet" href="https://dl.dropboxusercontent.com/u/43615815/CSS/bootstrap.css"> 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.6/css/jquery.dataTables.css"> 
+<script src="https://cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
+<h1>Index</h1>
+<%= link_to 'New Family Map', new_fmap_path %>
+<br><br>
+<table id="example" class="table table-hover" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+				<th>Title</th>
+				<th>Family</th>
+				<th>Version</th>
+				<th>Clinician</th>
+				<th>Notes</th>
+				<th>Username</th>
+				<th>Created At</th>
+				<th>Updated At</th>
+				<th>Load</th>
+				<th>Delete</th>
+				<th colspan="10"></th>
+            </tr>
+        </thead>
+ 
+        <tfoot>
+            <tr>
+				<th>Title</th>
+				<th>Family</th>
+				<th>Version</th>
+				<th>Clinician</th>
+				<th>Notes</th>
+				<th>Username</th>
+				<th>Created At</th>
+				<th>Updated At</th>
+				<th>Load</th>
+				<th>Delete</th>
+				<th colspan="10"></th>
+            </tr>
+        </tfoot>
+ 
+        <tbody>
+            <% @fmaps.each do |fmap| %>
+				<% if fmap.username == current_user.email %>
+					<tr>
+						<td><%= fmap.title %></td>
+						<td><%= fmap.family %></td>
+						<td><%= fmap.version %></td>
+						<td><%= fmap.extra %></td>
+						<td><%= fmap.notes %></td>
+						<td><%= fmap.username %></td>
+						<td><%= fmap.created_at %></td>
+						<td><%= fmap.updated_at %></td>
+						<td><%= link_to 'Load', fmap_path(fmap) %></td>
+						<td><%= link_to 'Delete', fmap_path(fmap),
+							method: :delete, data: { confirm: 'Are you sure?' } %></td>
+					</tr>
+				<% end %>
+			<% end %>
+        </tbody>
+    </table>
+
+<script>
+$(document).ready(function() {
+    $('#example').DataTable();
+} );
+</script>

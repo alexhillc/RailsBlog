@@ -1,0 +1,43 @@
+.navbar1 {
+	float: none;
+	text-align: center;
+	border-top: groove 2px #333;
+	width: 20%;
+	background-color: #000;
+	padding: 5px;
+	clear: both;
+	display: inline;
+	text-align: center;
+	list-style: none;
+	margin-top: 60px;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 100px;
+	
+}
+
+
+ul.nav {
+	list-style: none; /* this removes the list marker */
+/*	border-bottom: 1px solid #666;  this creates the top border for the links - all others are placed using a bottom border on the LI */
+	margin-top: 35px; /* this creates the space between the navigation on the content below */
+	display: block;
+	margin-left: 100px;
+	margin-top: 10px;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	clear: none;
+	position: relative;
+	height: 43px;
+	width: 969px;
+	position:absolute;
+	top:125px;
+	left:200px;
+	clip: rect(auto,auto,auto,auto);
+	bottom: auto;
+	top: 30;
+	
+	
+}

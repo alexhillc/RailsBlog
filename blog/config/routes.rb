@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
+  default_url_options :host => "http://www.vps.cs.wmich.edu:61580"
   
+
+  get 'password_resets/new'
 
   #get 'welcome/index'
 	resources :articles
@@ -9,6 +12,7 @@ Rails.application.routes.draw do
 	resources :posts
 	resources :tasks
 	resources :fmaps
+	resources :password_resets
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

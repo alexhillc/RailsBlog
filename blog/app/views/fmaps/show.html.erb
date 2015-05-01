@@ -8,8 +8,8 @@
 <script src="https://dl.dropboxusercontent.com/u/43615815/JS/joint.shapes.erd.js"></script>
 <script src="https://dl.dropboxusercontent.com/u/43615815/JS/joint.dia.command.js" type="text/javascript" ></script>
 
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
+<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
 
 <!-- Modal for square and oval -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -411,10 +411,10 @@
 			<li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">File <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="http://vps.cs.wmich.edu:61580/fmaps/new" onclick="return confirm('Are you sure? All unsaved changes will be lost.')">New</a></li>
+				  <li><%= link_to 'New', {:controller => 'fmaps', :action => 'new'}, data: { confirm: 'Are you sure? All unsaved changes will be lost.' } %></li>
                   <li><a href="#" onclick="save_to_database_prep()">Save</a></li>
 				  <li><a href="#" onclick="save_to_database_new_prep()">Save As...</a></li>
-                  <li><a href="http://vps.cs.wmich.edu:61580/fmaps/" onclick="return confirm('Are you sure? All unsaved changes will be lost.')">Load</a></li>
+				  <li><%= link_to 'Load', {:controller => 'fmaps'}, data: { confirm: 'Are you sure? All unsaved changes will be lost.' } %></li>
                   <li class="divider"></li>
                   <li class="dropdown-header">Export</li>
                   <li><a href="#" onclick="window.print()"; >Print</a></li>

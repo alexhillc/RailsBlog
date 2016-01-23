@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'admin/index'
+
   default_url_options :host => "http://www.vps.cs.wmich.edu:61580"
   
 

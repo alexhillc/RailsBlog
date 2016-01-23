@@ -415,7 +415,7 @@
                   <li><a href="#" onclick="save_to_database_prep()">Save</a></li>
 				  <li><a href="#" onclick="save_to_database_new_prep()">Save As...</a></li>
 				  <li><%= link_to 'Load', {:controller => 'fmaps'}, data: { confirm: 'Are you sure? All unsaved changes will be lost.' } %></li>
-				  <li><%= link_to 'Exit', {:controller => 'welcome', :action => 'index'}, data: { confirm: 'Are you sure? All unsaved changes will be lost.'} %></li>
+				  
                   <li class="divider"></li>
                   <li class="dropdown-header">Export</li>
                   <li><a href="#" onclick="window.print()"; >Print</a></li>

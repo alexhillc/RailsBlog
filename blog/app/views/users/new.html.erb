@@ -6,17 +6,10 @@
 	<%=f.label :email %>
 	<%=f.text_field :email, :class => 'form-control' %>
 	</br>
-	<%=f.label :password %>
-	<%=f.password_field :password, :class => 'form-control' %>
 	</br>
-	<%=f.label :password_confirmation %>
-	<%=f.password_field :password_confirmation, :class => 'form-control' %>
-	</br>
-	<%=f.submit "Sign Up", :class => 'btn btn-primary' %>
+	<%=f.submit "Request Account", :class => 'btn btn-primary' %>
 	
 	<h3>Already have an account?</h3>
 	<%= link_to 'Log In', {:controller => 'sessions', :action => 'new'} %>
-	<div>
-		<br><p><strong>Instructions:</strong> Enter an email and password. The password must be at least eight characters long. The email will be used if cases of forgotten passwords.</p>
-	</div>
+
 <%end%>

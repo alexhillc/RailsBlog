@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  devise_for :users
   get 'admin/index'
 
   default_url_options :host => "http://www.vps.cs.wmich.edu:61580"
@@ -27,6 +28,10 @@ Rails.application.routes.draw do
 	get "/log-out" => "sessions#destroy", as: :log_out
 	
 	get '/about' => 'fmaps#about'
+
+  get 'accountmanagement/index'
+  get 'accountmanagement/updatepassword'
+  post 'accountmanagement/updatepassword' => 'accountmanagement#update'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

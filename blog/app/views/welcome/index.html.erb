@@ -3,18 +3,18 @@
 
 <div class="container-full">
 
-      <div class="row">
-       
-        <div class="col-lg-12 text-center v-center">
-          
-          <h1>Family Interaction Map 1.0</h1>
-          <p class="lead">An Interactive Behavioural Mapping System</p>
-          
-          <br>
+	  <div class="row">
+	   
+		<div class="col-lg-12 text-center v-center">
 		  
-        </div>
-        
-      </div> <!-- /row -->
+		  <h1>Family Interaction Map 1.0</h1>
+		  <p class="lead">An Interactive Behavioural Mapping System</p>
+		  
+		  <br>
+		  
+		</div>
+		
+	  </div> <!-- /row -->
   
 
 
@@ -22,63 +22,54 @@
 
 <div class="container">
   
-  	<hr>
+	<hr>
   
-  	<div class="row">
-        <div class="col-md-3">
-          <div class="panel panel-default">
-            <div class="panel-heading"><h3><%= link_to 'Load Family Map', controller: 'fmaps' %></h3></div>
-            <div class="panel-body">Click here to go to previously saved family maps. Remember to log in first.
-            </div>
-          </div>
-        </div>
+	<div class="row">
 		<div class="col-md-3">
-          <div class="panel panel-default">
-            <div class="panel-heading"><h3><%= link_to 'New Family Map', {:controller => 'fmaps', :action => 'new'} %></h3></div>
-            <div class="panel-body">Click here to start work on a new family map. Remember to log in first.
-            </div>
-          </div>
-        </div>
-      	<div class="col-md-3">
-        	<div class="panel panel-default">
-            <div class="panel-heading"><h3><%= link_to 'Log In', {:controller => 'sessions', :action => 'new'} %></h3></div>
-            <div class="panel-body">Already have an account? Click above to log in and start making maps.
-            </div>
-          </div>
-        </div>
-      	<div class="col-md-3">
-        	<div class="panel panel-default">
-            <div class="panel-heading"><h3><%= link_to 'About', {:controller => 'fmaps', :action => 'about'} %></h3></div>
-            <div class="panel-body"> Go here for more information regarding family maps, including an FAQ section and more details.
-            </div>
-          </div>
-        </div>
-    </div>	
+		  <div class="panel panel-default">
+			<div class="panel-heading"><h3><%= link_to 'Load Family Map', controller: 'fmaps' %></h3></div>
+			<div class="panel-body">Click here to go to previously saved family maps. Remember to log in first.
+			</div>
+		  </div>
+		</div>
+		<div class="col-md-3">
+		  <div class="panel panel-default">
+			<div class="panel-heading"><h3><%= link_to 'New Family Map', {:controller => 'fmaps', :action => 'new'} %></h3></div>
+			<div class="panel-body">Click here to start work on a new family map. Remember to log in first.
+			</div>
+		  </div>
+		</div>
+		<% if current_user == nil %>
+			<div class="col-md-3">
+				<div class="panel panel-default">
+				<div class="panel-heading"><h3><%= link_to 'Log In', {:controller => 'sessions', :action => 'new'} %></h3></div>
+				<div class="panel-body">Already have an account? Click above to log in and start making maps.
+				</div>
+			  </div>
+			</div>
+		<% else %>
+			<div class="col-md-3">
+				<div class="panel panel-default">
+				<div class="panel-heading"><h3><%= link_to 'Manage Account', {:controller => 'accountmanagement', :action => 'index'} %></h3></div>
+				<div class="panel-body">Click here to manage your account.<br><br><br>
+				</div>
+			  </div>
+			</div>
+		<% end %>
+		<div class="col-md-3">
+			<div class="panel panel-default">
+			<div class="panel-heading"><h3><%= link_to 'About', {:controller => 'fmaps', :action => 'about'} %></h3></div>
+			<div class="panel-body"> Go here for more information regarding family maps, including an FAQ section and more details.
+			</div>
+		  </div>
+		</div>
+	</div>	
   
 	<div class="row">
-        <div class="col-lg-12">
-        <br><br>
+		<div class="col-lg-12">
+		<br><br>
 			<p class="pull-left"><%= link_to 'Log Out', {:controller => 'sessions', :action => 'destroy'} %></p>
-			<p class="pull-right">Project Sponsor: <strong>Dr. Michael Liepman</strong></p>
-        </div>
-    </div>
-	
-		<div class="row">
-        <div class="col-lg-12">
-			<p class="pull-right">Online Application Developed by: <strong>Joshua Inniger, Joseph Alflen, and Ailun Shen</strong></p>
-        </div>
-    </div>
-	
-	<div class="row">
-        <div class="col-lg-12">
-			<p class="pull-right">Faculty Advisor: <strong>John Kapenga </strong></p>
-        </div>
+		</div>
 	</div>
-	
-		<div class="row">
-        <div class="col-lg-12">
-			<p class="pull-right">Original Implementation Developed By: <strong>William Naylor and Douglas Losey </strong></p>
-        </div>
-    </div>
 	
 </div>

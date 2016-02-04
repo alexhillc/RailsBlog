@@ -1,5 +1,6 @@
-<link rel="stylesheet" href="https://dl.dropboxusercontent.com/u/43615815/CSS/bootstrap.css">
-<link rel="stylesheet" href="https://dl.dropboxusercontent.com/u/43615815/CSS/signin.css">
+<%= stylesheet_link_tag "bootstrap" %>
+<%= stylesheet_link_tag "signin" %>
+
 	<%=form_tag log_in_path, :class => 'form-signin' do%>
 	<h2 class="form-signin-heading">Sign In</h2>
 		<%=label_tag :email %>

@@ -1,12 +1,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
   
-<link rel="stylesheet" href="https://dl.dropboxusercontent.com/u/43615815/CSS/bootstrap.css">  
-<link rel="stylesheet" href="https://dl.dropboxusercontent.com/u/43615815/CSS/joint.css" />
+<%= stylesheet_link_tag "bootstrap" %>
+<%= stylesheet_link_tag "joint" %>
 
-<script src="https://dl.dropboxusercontent.com/u/43615815/JS/customjoint.js"></script>
-<script src="https://dl.dropboxusercontent.com/u/43615815/JS/joint.shapes.erd.js"></script>
-<script src="https://dl.dropboxusercontent.com/u/43615815/JS/joint.dia.command.js" type="text/javascript" ></script>
+<%= javascript_include_tag "customjoint" %>
+<%= javascript_include_tag "joint.shapes.erd" %>
+<%= javascript_include_tag "joint.dia.command" %>
 
 <script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
 <script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>

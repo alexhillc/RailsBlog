@@ -1,1 +1,20 @@
-<%= link_to 'Change Password', {:controller => 'accountmanagement', :action => 'updatepassword'} %>
+<%= stylesheet_link_tag "bootstrap" %>
+<%= stylesheet_link_tag "signin" %>
+
+<%= link_to 'Click here to change your password', {:controller => 'accountmanagement', :action => 'updatepassword'} %>
+
+<% if current_user #IS AN ADMINISTRATOR TODO# %>
+<%= form_for User.new, :html => {:class => "form-signin"} do |f| %>
+	<h2 class="form-signin-heading">Create an Account</h2>
+	<%= f.label :email %>
+	<%= f.text_field :email, :class => 'form-control' %>
+	<br>
+	<%= f.label :password %>
+	<%= f.password_field :password, :class => 'form-control' %> 
+	<%= f.label :password_confirmation %>
+	<%= f.password_field :password_confirmation, :class => 'form-control' %>
+	<br>
+	<%=f.submit "Create Account", :class => 'btn btn-primary' %>
+<% end %>
+
+<%end%>

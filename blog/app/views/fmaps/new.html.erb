@@ -4,12 +4,13 @@
 <%= stylesheet_link_tag "bootstrap" %>
 <%= stylesheet_link_tag "joint" %>
 
-<%= javascript_include_tag "customjoint" %>
-<%= javascript_include_tag "joint.shapes.erd" %>
-<%= javascript_include_tag "joint.dia.command" %>
-
-<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
-<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
+<!-- Chrome 48 fix for getTransformToElement being removed -->
+<script>
+SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(toElement) {
+    return toElement.getScreenCTM().inverse().multiply(this.getScreenCTM());
+};
+</script>
+<%= javascript_include_tag "jquery-1.11.1.min" %>
 
 <!-- Modal for square and oval -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -52,13 +53,13 @@
 			<form role="form">
 				<label for="normal">Text Style:</label><br>
 				<label class="radio-inline">
-					<input type="radio" name="optradio3" id="normal" checked>Normal
+					<input type="radio" name="optradio3" value="0" id="normal" checked>Normal
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="optradio3" id="bold">Bold
+					<input type="radio" name="optradio3" value="1" id="bold">Bold
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="optradio3" id="italics">Italics
+					<input type="radio" name="optradio3" value="2" id="italics">Italics
 					</label>
 			</form>
 		</div>
@@ -94,34 +95,37 @@
       <div class="modal-body">
 		<div class="form-group">
 			<label for="name">Feelings:</label><br>
-			<input type="checkbox" value="" id="angry">Angry
-			<input type="checkbox" value="" id="sad">Sad
-			<input type="checkbox" value="" id="happy">Happy<br>
-			<input type="checkbox" value="" id="aroused">Aroused
-			<input type="checkbox" value="" id="scared">Scared
-			<input type="checkbox" value="" id="discomfort"> Physical Discomfort
+			<input type="checkbox" id="angry">Angry
+			<input type="checkbox" id="sad">Sad
+			<input type="checkbox" id="happy">Happy<br>
+			<input type="checkbox" id="aroused">Aroused
+			<input type="checkbox" id="worried">Worried
+			<input type="checkbox" id="lonely">Lonely<br>
+			<input type="checkbox" id="ashamed">Ashamed
+			<input type="checkbox" id="guilty">Guilty
+			<input type="checkbox" id="discomfort"> Physical Discomfort
 		</div>
 
 		<div class="form-group">
 			<form role="form">
 				<label class="radio-inline">
-					<input type="radio" name="optradio" id="red2">Red
+					<input type="radio" name="optradio" id="dia_red">Red
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="optradio" id="yellow2">Yellow
+					<input type="radio" name="optradio" id="dia_yellow">Yellow
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="optradio" id="blue2">Blue
+					<input type="radio" name="optradio" id="dia_blue">Blue
 					</label>
 					<br>
 				<label class="radio-inline">
-					<input type="radio" name="optradio" id="orange2">Orange
+					<input type="radio" name="optradio" id="dia_orange">Orange
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="optradio" id="green2" checked>Green
+					<input type="radio" name="optradio" id="dia_green" checked>Green
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="optradio" id="violet2">Violet
+					<input type="radio" name="optradio" id="dia_violet">Violet
 					</label>
 			</form>
 		</div>
@@ -140,7 +144,7 @@
 			<button type="button" class="btn btn-danger" onclick="remove_dia()">Delete</button>
 		</div>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onClick="div_hide2()">Save changes</button>
+        <button type="button" class="btn btn-primary" onClick="div_hide_dia()">Save changes</button>
       </div>
     </div>
   </div>
@@ -222,32 +226,44 @@
 			<form role="form">
 			<label>Arrow Head:</label><br>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio" id="oneHead" checked>One Arrow Head
+					<input type="radio" name="arrowOptRadio" value="1" id="oneHead" checked>One Arrow Head
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio" id="twoHead">Two Arrow Head
+					<input type="radio" name="arrowOptRadio" value="2" id="twoHead">Two Arrow Head
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio" id="noHead">No Arrow Head
+					<input type="radio" name="arrowOptRadio" value="0" id="noHead">No Arrow Head
 					</label>
 					<br>
 			<br><label>Arrow Body:</label><br>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio2" id="solidArrow" checked>Solid Arrow
+					<input type="radio" name="arrowOptRadio2" value="0" id="solidArrow" checked>Solid Arrow
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio2" id="dashedArrow">Dashed Arrow
+					<input type="radio" name="arrowOptRadio2" value="1" id="dashedArrow">Dashed Arrow
 				</label><br>
 			<br><label>Arrow Color:</label><br>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio3" id="blackArrow" checked>Black
+					<input type="radio" name="arrowOptRadio3" value="#333333" id="blackArrow" checked>Black
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio3" id="redArrow">Red
+					<input type="radio" name="arrowOptRadio3" value="#FF0000" id="redArrow">Red
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio3" id="greenArrow">Green
-					</label>
+					<input type="radio" name="arrowOptRadio3" value="#00CC00" id="greenArrow">Green
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="arrowOptRadio3" value="#FFFF00" id="yellowArrow">Yellow
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="arrowOptRadio3" value="#00CCFF" id="blueArrow">Blue
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="arrowOptRadio3" value="#FF9900" id="orangeArrow">Orange
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="arrowOptRadio3" value="#9933FF" id="violetArrow">Violet
+				</label
 					<br>
 			</form>
 		</div>
@@ -385,9 +401,9 @@
 				<button type="button" class="btn btn-default navbar-btn" onclick="add_oval()">Oval - Action</button>
 				<button type="button" class="btn btn-default navbar-btn" onclick="add_diamond()">Diamond - Feeling</button>
 				<button type="button" class="btn btn-default navbar-btn" onclick="add_square()">Square - Thought</button>
-		
+				<span id="arrow_note" style="color: red; display: none; font-size: 18px;">Click on two different elements to create an Arrow, or you can cancel by clicking the Cancel button to the right.</span>
 				<div class="navbar-right">
-				<button type="button" class="btn btn-default navbar-btn" id="arrowOptionsButton" onclick="div_arrow_show()">Arrow Options</button>
+				<button type="button" class="btn btn-default navbar-btn" id="arrowOptionsButton" onclick="clickToLink()">Add Arrow</button>
 				<button type="button" class="btn btn-default navbar-btn" id="undo"><span class="glyphicon glyphicon-arrow-left"></span> Undo</button>
 				<button type="button" class="btn btn-default navbar-btn" id="redo">Redo <span class="glyphicon glyphicon-arrow-right"></span></button>
 				</div>
@@ -408,1114 +424,17 @@
 
 </div>
 
-<script>
-var uID;
-var jsonString;
-var graph = new joint.dia.Graph;
 
-var paper = new joint.dia.Paper({
-    el: $('#paper'),
-    width: (screen.width-50),
-    height: (screen.height-100),
-    gridSize: 1,
-	perpendicularLinks: false,
-	linkConnectionPoint: joint.util.shapePerimeterConnectionPoint,
-    model: graph
-});
-
-var commandManager = new joint.dia.CommandManager({ graph: graph });
-var erd = joint.shapes.erd;
-
-var element = function(elm, x, y, label) {
-    var cell = new elm({ position: { x: x, y: y }, attrs: { text: { text: label }}});
-    graph.addCell(cell);
-    return cell;
-};
-
-var myLink;
-var link = function(elm1, elm2) {
-    myLink = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#333333',
-            'stroke-width': 3
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLink);
-    return myLink;
-};
-
-var myLinkRed;
-var linkRed = function(elm1, elm2) {
-    myLinkRed = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#FF0000',
-            'stroke-width': 3
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLinkRed);
-    return myLinkRed;
-};
-
-var myLinkGreen;
-var linkGreen = function(elm1, elm2) {
-    myLinkGreen = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#00CC00',
-            'stroke-width': 3
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLinkGreen);
-    return myLinkGreen;
-};
-
-var myLink3;
-var link3 = function(elm1, elm2) {
-    myLink3 = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#333333',
-            'stroke-width': 3,
-			'stroke-dasharray': '5 2'
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLink3);
-    return myLink3;
-};
-
-var myLink3Red;
-var link3Red = function(elm1, elm2) {
-    myLink3Red = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#FF0000',
-            'stroke-width': 3,
-			'stroke-dasharray': '5 2'
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLink3Red);
-    return myLink3Red;
-};
-
-var myLink3Green;
-var link3Green = function(elm1, elm2) {
-    myLink3Green = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#00CC00',
-            'stroke-width': 3,
-			'stroke-dasharray': '5 2'
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLink3Green);
-    return myLink3Green;
-};
-
-var myLink4;
-var link4 = function(elm1, elm2) {
-    myLink4 = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#333333',
-            'stroke-width': 3
-        },
-        '.marker-source': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLink4);
-    return myLink4;
-};
-
-var myLink4Red;
-var link4Red = function(elm1, elm2) {
-    myLink4Red = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#FF0000',
-            'stroke-width': 3
-        },
-        '.marker-source': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLink4Red);
-    return myLink4Red;
-};
-
-var myLink4Green;
-var link4Green = function(elm1, elm2) {
-    myLink4Green = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#00CC00',
-            'stroke-width': 3
-        },
-        '.marker-source': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLink4Green);
-    return myLink4Green;
-};
-
-var myLink5;
-var link5 = function(elm1, elm2) {
-    myLink5 = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#333333',
-            'stroke-width': 3,
-			'stroke-dasharray': '5 2'
-        },
-        '.marker-source': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLink5);
-    return myLink5;
-};
-
-var myLink5Green;
-var link5Green = function(elm1, elm2) {
-    myLink5Green = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#00CC00',
-            'stroke-width': 3,
-			'stroke-dasharray': '5 2'
-        },
-        '.marker-source': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLink5Green);
-    return myLink5Green;
-};
-
-var myLink5Red;
-var link5Red = function(elm1, elm2) {
-    myLink5Red = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#FF0000',
-            'stroke-width': 3,
-			'stroke-dasharray': '5 2'
-        },
-        '.marker-source': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLink5Red);
-    return myLink5Red;
-};
-
-var myLink6;
-var link6 = function(elm1, elm2) {
-    myLink6 = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#333333',
-            'stroke-width': 3,
-			'stroke-dasharray': '5 2'
-        }
-    }
-		});
-    graph.addCell(myLink6);
-    return myLink6;
-};
-
-var myLink6Red;
-var link6Red = function(elm1, elm2) {
-    myLink6Red = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#FF0000',
-            'stroke-width': 3,
-			'stroke-dasharray': '5 2'
-        }
-    }
-		});
-    graph.addCell(myLink6Red);
-    return myLink6Red;
-};
-
-var myLink6Green;
-var link6Green = function(elm1, elm2) {
-    myLink6Green = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#00CC00',
-            'stroke-width': 3,
-			'stroke-dasharray': '5 2'
-        }
-    }
-		});
-    graph.addCell(myLink6Green);
-    return myLink6Green;
-};
-
-var myLink2;
-var link2 = function(elm1, elm2) {
-    myLink2 = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#333333',
-            'stroke-width': 3
-        }
-    }
-		});
-    graph.addCell(myLink2);
-    return myLink2;
-};
-
-var myLink2Red;
-var link2Red = function(elm1, elm2) {
-    myLink2Red = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#FF0000',
-            'stroke-width': 3
-        }
-    }
-		});
-    graph.addCell(myLink2Red);
-    return myLink2Red;
-};
-
-var myLink2Green;
-var link2Green = function(elm1, elm2) {
-    myLink2Green = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#00CC00',
-            'stroke-width': 3
-        }
-    }
-		});
-    graph.addCell(myLink2Green);
-    return myLink2Green;
-};
-
-$('#undo').on('click', _.bind(commandManager.undo, commandManager));
-$('#redo').on('click', _.bind(commandManager.redo, commandManager));
-
-paper.on('cell:pointerdblclick', 
-    function(cellView, evt, x, y) { 
-		var elm = graph.getCell(cellView.model.id);
-		var txt = elm.prop('content');
-		var res = txt.replace("<p>", "");
-		var fin = res.replace("</p>", "");
-		
-		var rep1 = fin.replace("<strong>", "");
-		var rep2 = rep1.replace("</strong>", "");
-		
-		var rep11 = rep2.replace("<p style=\"padding:0px 10px 0px 10px;\">", "");
-		
-		var rep3 = rep11.replace("<em>", "");
-		var rep4 = rep3.replace("</em>", "");
-		
-		var com = elm.prop('comment');
-		
-		var type = elm.prop('type');
-		if (type=='basic.TextBlock')
-		{
-			document.getElementById("name").value = rep4;
-			document.getElementById("comments").value = com;
-			uID = cellView.model.id;
-			div_show();
-		}else if(type=='basic.TextBlockD')
-		{
-			document.getElementById("comments2").value = com;
-		
-			uID = cellView.model.id;
-			var sadCheck = elm.prop('sad');
-			var angryCheck = elm.prop('angry');
-			var scaredCheck = elm.prop('scared');
-			var happyCheck = elm.prop('happy');
-			var arousedCheck = elm.prop('aroused');
-			var discomfortCheck = elm.prop('discomfort');
-			
-			document.getElementById("sad").checked = false;
-			document.getElementById("angry").checked = false;
-			document.getElementById("scared").checked = false;
-			document.getElementById("happy").checked = false;
-			document.getElementById("aroused").checked = false;
-			document.getElementById("discomfort").checked = false;
-			
-			if(sadCheck=='t'){
-				document.getElementById("sad").checked = true;}
-			if(angryCheck=='t'){
-				document.getElementById("angry").checked = true;}
-			if(scaredCheck=='t'){
-				document.getElementById("scared").checked = true;}
-			if(happyCheck=='t'){
-				document.getElementById("happy").checked = true;}
-			if(arousedCheck=='t'){
-				document.getElementById("aroused").checked = true;}
-			if(discomfortCheck=='t'){
-				document.getElementById("discomfort").checked = true;}
-			
-			$('#diaModal').modal('show');
-		}
-		else
-		{
-			document.getElementById("name").value = rep4;
-			document.getElementById("comments").value = com;
-			uID = cellView.model.id;
-			div_show();
-		}
-    }
-);
-
-paper.on('cell:pointerup', function(cellView, evt, x, y) {
-
-    // Find the first element below that is not a link nor the dragged element itself.
-    var elementBelow = graph.get('cells').find(function(cell) {
-        if (cell instanceof joint.dia.Link) return false; // Not interested in links.
-        if (cell.id === cellView.model.id) return false; // The same element as the dropped one.
-        if (cell.getBBox().containsPoint(g.point(x, y))) {
-            return true;
-        }
-        return false;
-    });
-    
-    // If the two elements are connected already, don't
-    // connect them again (this is application specific though).
-    if (elementBelow && !_.contains(graph.getNeighbors(elementBelow), cellView.model)) {
-/*
-        graph.addCell(new joint.dia.Link({
-            source: { id: cellView.model.id }, target: { id: elementBelow.id },
-            attrs: { '.marker-source': { d: 'M 10 0 L 0 5 L 10 10 z' } }
-        }));
-	*/	
-		var s = graph.getCell(cellView.model.id);
-		var t = graph.getCell(elementBelow.id);
-		
-		if(document.getElementById('oneHead').checked) 
-		{
-			if(document.getElementById('solidArrow').checked)
-			{
-				//one head solid - default
-				if(document.getElementById('redArrow').checked)
-				{
-					linkRed(t,s);
-				}else if (document.getElementById('greenArrow').checked)
-				{
-					linkGreen(t,s);
-				}else
-				{
-					link(t,s);
-				}
-				
-			}else
-			{
-				//one head dashed
-				if(document.getElementById('redArrow').checked)
-				{
-					link3Red(t,s);
-				}else if (document.getElementById('greenArrow').checked)
-				{
-					link3Green(t,s);
-				}else
-				{
-					link3(t,s);
-				}
-			}
-		}else if(document.getElementById('twoHead').checked) 
-		{
-			if(document.getElementById('solidArrow').checked)
-			{
-				//two head solid
-				if(document.getElementById('redArrow').checked)
-				{
-					link4Red(t,s);
-				}else if (document.getElementById('greenArrow').checked)
-				{
-					link4Green(t,s);
-				}else
-				{
-					link4(t,s);
-				}
-			}else
-			{
-				//two head dashed
-				if(document.getElementById('redArrow').checked)
-				{
-					link5Red(t,s);
-				}else if (document.getElementById('greenArrow').checked)
-				{
-					link5Green(t,s);
-				}else
-				{
-					link5(t,s);
-				}
-			}
-		}
-		else //no head 
-		{
-			if(document.getElementById('solidArrow').checked)
-			{
-				//no head solid
-				if(document.getElementById('redArrow').checked)
-				{
-					link2Red(t,s);
-				}else if (document.getElementById('greenArrow').checked)
-				{
-					link2Green(t,s);
-				}else
-				{
-					link2(t,s);
-				}
-			}else
-			{
-				//no head dashed
-				if(document.getElementById('redArrow').checked)
-				{
-					link6Red(t,s);
-				}else if (document.getElementById('greenArrow').checked)
-				{
-					link6Green(t,s);
-				}else
-				{
-					link6(t,s);
-				}
-			}
-		}
-		
-		//link(t,s);
-		
-		var sx = s.prop('position/x');
-		var sy = s.prop('position/y');
-		//alert(sx+sy);
-        // Move the element a bit to the side.
-		if(sx>1000)
-		{
-			s.translate(-200, 0);
-		}
-		else
-		{
-			s.translate(200, 0);
-		}
-    }
-});
-
-function changeText2(){
-var textBoxText = document.getElementById("name").value;
-var elm = graph.getCell(uID);
-var type = elm.prop('type');
-
-//need to figure out something here to check text length and auto adapt size//
-var x = Math.floor(getTextWidth(textBoxText, "14pt arial"))+1;
-
-var sLen = 208;
-var oLen = 110;
-
-if(type=="basic.TextBlock")//square 208 per line
-{
-	elm.resize(170, 20*(Math.ceil(x/sLen)));
-}else//oval varies
-{
-	elm.resize(170, 20*(Math.ceil(x/oLen)));
-}
-
-//var fullText = "<p>"+joint.util.breakText(textBoxText, { width: 150 })+"</p>";
-
-if(document.getElementById('normal').checked)
-{
-	if(type=="basic.TextBlock")//square
-	{
-		var fullText = "<p>"+textBoxText+"</p>";
-	}else //oval
-	{
-		var fullText = "<p style=\"padding:0px 10px 0px 10px;\">"+textBoxText+"</p>";
-	}
-	
-}else if (document.getElementById('bold').checked)
-{
-	if(type=="basic.TextBlock")//square
-	{
-		var fullText = "<p><strong>"+textBoxText+"</strong></p>";
-	}else //oval
-	{
-		var fullText = "<p style=\"padding:0px 10px 0px 10px;\"><strong>"+textBoxText+"</strong></p>";
-	}
-}
-else
-{
-	if(type=="basic.TextBlock")//square
-	{
-		var fullText = "<p><em>"+textBoxText+"</em></p>";
-	}else //oval
-	{
-		var fullText = "<p style=\"padding:0px 10px 0px 10px;\"><em>"+textBoxText+"</em></p>";
-	}
-}
-
-elm.prop('content',fullText);
-elm.prop('comment',document.getElementById("comments").value);
-}
-
-//Function To Display Popup
-function div_show() {
-$('#myModal').modal('show');
-}
-//Function to Hide Popup
-function div_hide(){
-changeText2();
-var elm = graph.getCell(uID);
-var type = elm.prop('type');
-
-if(type=="basic.TextBlock")
-{
-
-if(document.getElementById('green').checked) {
-  elm.attr({
-    rect: { fill: '#33CC33', stroke: '#29A329' }//green
-});
-}else if(document.getElementById('blue').checked) {
-  elm.attr({
-    rect: { fill: '#00CCFF', stroke: '#00A3CC' }//blue
-}); 
-}else if(document.getElementById('red').checked) {
-  elm.attr({
-    rect: { fill: '#FF3333', stroke: '#FF0000' }//red
-}); 
-}else if(document.getElementById('violet').checked) {
-  elm.attr({
-    rect: { fill: '#9933FF', stroke: '#7A29CC' }//violet
-}); 
-}else if(document.getElementById('yellow').checked) {
-  elm.attr({
-    rect: { fill: '#FFFF00', stroke: '#CCCC00' }//yellow
-}); 
-}else if(document.getElementById('orange').checked) {
-  elm.attr({
-    rect: { fill: '#FF9900', stroke: '#CC7A00' }//orange
-}); 
-}
-
-$('#myModal').modal('hide');
-}else
-{
-if(document.getElementById('green').checked) {
-  elm.attr({
-    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
-});
-}else if(document.getElementById('blue').checked) {
-  elm.attr({
-    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//blue
-}); 
-}else if(document.getElementById('red').checked) {
-  elm.attr({
-    '.outer': { fill: '#FF3333', stroke: '#FF0000' }//red
-}); 
-}else if(document.getElementById('violet').checked) {
-  elm.attr({
-    '.outer': { fill: '#9933FF', stroke: '#7A29CC' }//violet
-}); 
-}else if(document.getElementById('yellow').checked) {
-  elm.attr({
-    '.outer': { fill: '#FFFF00', stroke: '#CCCC00' }//yellow
-}); 
-}else if(document.getElementById('orange').checked) {
-  elm.attr({
-    '.outer': { fill: '#FF9900', stroke: '#CC7A00' }//orange
-}); 
-}
-
-$('#myModal').modal('hide');
-}
-
-}
-
-function div_hide2(){
-var numChecked = 0;
-if(document.getElementById('sad').checked){
-	numChecked++;
-}
-if(document.getElementById('angry').checked){
-	numChecked++;
-}
-if(document.getElementById('happy').checked){
-	numChecked++;
-}
-if(document.getElementById('aroused').checked){
-	numChecked++;
-}
-if(document.getElementById('scared').checked){
-	numChecked++;
-}
-if(document.getElementById('discomfort').checked){
-	numChecked++;
-}
-
-if(numChecked>3){
-	//do something
-	alert("Too many boxes checked");
-	return;
-}
-
-var elm = graph.getCell(uID);
-var textInBox="";
-
-if(document.getElementById('aroused').checked)
-{
-	textInBox+="Aroused "
-	elm.prop('aroused','t');
-}else
-{
-	elm.prop('aroused','f');
-}
-if(document.getElementById('angry').checked)
-{
-	textInBox+="Angry "
-	elm.prop('angry','t');
-}else
-{
-	elm.prop('angry','f');
-}
-if(document.getElementById('happy').checked)
-{
-	textInBox+="Happy "
-	elm.prop('happy','t');
-}else
-{
-	elm.prop('happy','f');
-}
-if(document.getElementById('scared').checked)
-{
-	textInBox+="Scared "
-	elm.prop('scared','t');
-}else
-{
-	elm.prop('scared','f');
-}
-if(document.getElementById('sad').checked)
-{
-	textInBox+="Sad "
-	elm.prop('sad','t');
-}else
-{
-	elm.prop('sad','f');
-}
-if(document.getElementById('discomfort').checked)
-{
-	textInBox+="Discomfort "
-	elm.prop('discomfort','t');
-}else
-{
-	elm.prop('discomfort','f');
-}
-var abc = textInBox.trim();
-var addPlus = abc.replace(/ /g, " + ");
-var fin = "<p>"+addPlus+"</p>";
-elm.prop('content',fin);
-
-var com = document.getElementById('comments2').value;
-elm.prop('comment',com);
-
-if(document.getElementById('green2').checked) {
-  elm.attr({
-    '.outer': { fill: '#33CC33', stroke: '#29A329' }//green
-});
-}else if(document.getElementById('blue2').checked) {
-  elm.attr({
-    '.outer': { fill: '#00CCFF', stroke: '#00A3CC' }//blue
-}); 
-}else if(document.getElementById('red2').checked) {
-  elm.attr({
-    '.outer': { fill: '#FF3333', stroke: '#FF0000' }//red
-}); 
-}else if(document.getElementById('violet2').checked) {
-  elm.attr({
-    '.outer': { fill: '#9933FF', stroke: '#7A29CC' }//violet
-}); 
-}else if(document.getElementById('yellow2').checked) {
-  elm.attr({
-    '.outer': { fill: '#FFFF00', stroke: '#CCCC00' }//yellow
-}); 
-}else if(document.getElementById('orange2').checked) {
-  elm.attr({
-    '.outer': { fill: '#FF9900', stroke: '#CC7A00' }//orange
-}); 
-}
-
-$('#diaModal').modal('hide');
-}
-
-//Function to serialize graph
-function serialize_graph(){
-jsonString = JSON.stringify(graph.toJSON());
-console.log(jsonString);
-}
-
-//Function to deserialize graph
-function deserialize_graph(){
-graph.fromJSON(JSON.parse(jsonString));
-}
-/*
-function add_arrow(){
-	var elm = graph.getCell(uID);
-    var myLink = new erd.Line({ source: { id: elm.id }, 
-		connector: { name: 'smooth' },
-		attrs: {
-        '.connection': {
-            stroke: '#333333',
-            'stroke-width': 3
-        },
-        '.marker-target': {
-            fill: '#333333',
-            d: 'M 10 0 L 0 5 L 10 10 z'
-        }
-    }
-		});
-    graph.addCell(myLink);
-}
-*/
-function add_oval(){
-
-	var textBlock = new joint.shapes.basic.TextBlockC({
-                position: { x:100, y:100 },
-				size: { width: 170, height: 80 },
-                content: "<p> </p>",
-				comment: " "
-        });
-	graph.addCell(textBlock);
-	var txt = textBlock.prop('content');
-	var res = txt.replace("<p>", "");
-	var fin = res.replace("</p>", "");
-	document.getElementById("name").value = fin;
-	var com = textBlock.prop('comment');
-	document.getElementById("comments").value = com;
-	uID = textBlock.id;
-	$('#myModal').modal('show');
-}
-
-function add_diamond(){
-
-	document.getElementById("sad").checked = false;
-	document.getElementById("angry").checked = false;
-	document.getElementById("scared").checked = false;
-	document.getElementById("happy").checked = false;
-	document.getElementById("aroused").checked = false;
-	document.getElementById("discomfort").checked = false;
-
-	var textBlock = new joint.shapes.basic.TextBlockD({
-                position: { x:100, y:100 },
-				size: { width: 110, height: 110 },
-                content: "<p> </p>",
-				comment: " "
-        });
-	graph.addCell(textBlock);
-	var txt = textBlock.prop('content');
-	var res = txt.replace("<p>", "");
-	var fin = res.replace("</p>", "");
-	document.getElementById("name").value = fin;
-	var com = textBlock.prop('comment');
-	document.getElementById("comments2").value = com;
-	uID = textBlock.id;
-	$('#diaModal').modal('show');
-}
-
-function add_square(){
-
-	var textBlock = new joint.shapes.basic.TextBlock({
-                position: { x:100, y:100 },
-				size: { width: 170, height: 80 },
-                content: "<p> </p>",
-				comment: " "
-        });
-	graph.addCell(textBlock);
-	var txt = textBlock.prop('content');
-	var res = txt.replace("<p>", "");
-	var fin = res.replace("</p>", "");
-	document.getElementById("name").value = fin;
-	var com = textBlock.prop('comment');
-	document.getElementById("comments").value = com;
-	uID = textBlock.id;
-	$('#myModal').modal('show');
-}
-
-function remove_shape()
-{
-	graph.getCell(uID).remove();
-	$('#myModal').modal('hide');
-}
-
-function remove_dia()
-{
-	graph.getCell(uID).remove();
-	$('#diaModal').modal('hide');
-}
-
-function save_to_database_prep()
-{
-	$('#passModal').modal('show');
-}
-function save_proceed()
-{
-	var password = document.getElementById("pw").value;
-	var password2 = document.getElementById("pwCon").value;
-	if(password.length<5 || password!=password2)
-	{
-		alert("Map Password error. Map Password must be at least five characters in length and match confirmation.");
-		return;
-	}
-	document.getElementById("fmap_json").value = CryptoJS.AES.encrypt(JSON.stringify(graph.toJSON()),document.getElementById("pw").value);
-	$('#passModal').modal('hide');
-	$('#saveModal').modal('show');
-}
-function div_save_hide()
-{
-	$('#saveModal').modal('hide');
-	//the save div is now hidden
-}
-
-function div_arrow_hide()
-{
-	$('#arrowModal').modal('hide');
-}
-
-function div_arrow_show()
-{
-	$('#arrowModal').modal('show');
-}
-
-function save_to_database()
-{
-	title = document.getElementById("fmap_title").value;
-	if(title == ""){
-		alert("Please include a title before saving");
-	}
-	else{
-		alert('Family Map Saved');
-		$('#saveModal').modal('hide');
-	}
-}
-
-function getTextWidth(text, font) {
-    // re-use canvas object for better performance
-    var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
-    var context = canvas.getContext("2d");
-    context.font = font;
-    var metrics = context.measureText(text);
-    return metrics.width;
-};
-
-function div_txt_show()
-{	
-	var password = document.getElementById("txtPW").value;
-	var password2 = document.getElementById("txtPWCon").value;
-	if(password.length<5 || password!=password2)
-	{
-		alert("Text Password error. Text Password must be at least five characters in length and match confirmation.");
-		return;
-	}
-	$('#passTxtDownloadModal').modal('hide');
-	$('#txtModal').modal('show');
-}
-
-function div_txt_pw_show()
-{
-	$('#passTxtDownloadModal').modal('show');
-}
-
-function div_txt_imp_show()
-{
-	$('#passTxtUploadModal').modal('show');
-}
-
-function div_chooser_show()
-{
-	$('#passTxtUploadModal').modal('hide');
-	$('#txtImportModal').modal('show');
-}
-
-function download()
-{
-	var fileNameToSaveAs = document.getElementById("fileName").value;
-	var txtTest = fileNameToSaveAs.slice(-4);
-	
-	if(txtTest!=".txt" || fileNameToSaveAs.length < 5)
-	{
-		alert("File name error. File name must start with a valid character and end with \".txt\" ");
-		return;
-	}
-	
-	var textToWrite = CryptoJS.AES.encrypt(JSON.stringify(graph.toJSON()),document.getElementById("txtPW").value);
-	var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
-
-	var downloadLink = document.createElement("a");
-	downloadLink.download = fileNameToSaveAs;
-	downloadLink.innerHTML = "Download File";
-	if (window.webkitURL != null)
-	{
-		// Chrome allows the link to be clicked
-		// without actually adding it to the DOM.
-		downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-	}
-	else
-	{
-		// Firefox requires the link to be added to the DOM
-		// before it can be clicked.
-		downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-		downloadLink.onclick = destroyClickedElement;
-		downloadLink.style.display = "none";
-		document.body.appendChild(downloadLink);
-	}
-
-	downloadLink.click();
-	$('#txtModal').modal('hide');
-}
-
-function destroyClickedElement(event)
-{
-	document.body.removeChild(event.target);
-}
-
-function loadFileAsText()
-{
-	var fileToLoad = document.getElementById("fileToLoad").files[0];
-
-	var fileReader = new FileReader();
-	fileReader.onload = function(fileLoadedEvent) 
-	{
-		var textFromFileLoaded = fileLoadedEvent.target.result;
-		///document.getElementById("inputTextToSave").value = textFromFileLoaded;
-		var decrypted = CryptoJS.AES.decrypt(textFromFileLoaded, document.getElementById("txtUpPW").value);
-		graph.fromJSON(JSON.parse(decrypted.toString(CryptoJS.enc.Utf8)));
-		//graph.fromJSON(JSON.parse(textFromFileLoaded));
-	};
-	fileReader.readAsText(fileToLoad, "UTF-8");
-	$('#txtImportModal').modal('hide');
-}
-
-$( document ).ready(function() {
-	//relapse line
-	var width = (screen.width-50);
-	var w2 = width/2;
-    var height = (screen.height-100);
-	var h2 = height/2;
-	
-	var textBlock = new joint.shapes.basic.TextBlock({
-                position: { x:0, y:h2 },
-				size: { width: 1, height: 1 },
-                content: "<p> </p>"
-    });
-	graph.addCell(textBlock);
-	
-	textBlock.attr({
-		rect: { fill: '#E0E0EB', stroke: '#E0E0EB' }
-		});
-	
-	var textBlock2 = new joint.shapes.basic.TextBlock({
-                position: { x:screen.width, y:h2 },
-				size: { width: 1, height: 1 },
-                content: "<p> </p>"
-    });
-	graph.addCell(textBlock2);
-	
-	textBlock2.attr({
-		rect: { fill: '#E0E0EB', stroke: '#E0E0EB' }
-		});
-		
-	link2(textBlock,textBlock2);
-	
-});
-
-
-
-</script>
 </body>
 
-<%= javascript_include_tag "jquery-1.11.1.min" %>
+<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
+<%= javascript_include_tag "customjoint" %>
 <%= javascript_include_tag "bootstrap" %>
+<%= javascript_include_tag "joint.dia.command" %>
+<%= javascript_include_tag "joint.shapes.erd" %>
+
+<%= javascript_include_tag "index" %>
+
 
 </html>

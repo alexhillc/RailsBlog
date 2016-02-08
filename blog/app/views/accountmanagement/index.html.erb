@@ -1,7 +1,13 @@
 <%= stylesheet_link_tag "bootstrap" %>
 <%= stylesheet_link_tag "signin" %>
 
+
+<div class="form-signin">
+<%= link_to 'Home', root_path %>
+<br>
 <%= link_to 'Click here to change your password', {:controller => 'accountmanagement', :action => 'updatepassword'} %>
+<br>
+</div>
 
 <% if current_user #IS AN ADMINISTRATOR TODO# %>
 <%= form_for User.new, :html => {:class => "form-signin"} do |f| %>

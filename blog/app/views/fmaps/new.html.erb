@@ -1,16 +1,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-<%= stylesheet_link_tag "bootstrap" %>
+
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">  
 <%= stylesheet_link_tag "joint" %>
 
-<!-- Chrome 48 fix for getTransformToElement being removed -->
-<script>
-SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(toElement) {
-    return toElement.getScreenCTM().inverse().multiply(this.getScreenCTM());
-};
-</script>
-<%= javascript_include_tag "jquery-1.11.1.min" %>
+<%= javascript_include_tag "jquery.min" %>
 
 <!-- Modal for square and oval -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -29,24 +23,25 @@ SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformTo
 			<form role="form">
 			<label for="red">Shape Color:</label><br>
 				<label class="radio-inline">
-					<input type="radio" name="optradio" value="#FF3333" id="red">Red
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="optradio" value="#FFFF00" id="yellow">Yellow
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="optradio" value="#00CCFF" id="blue">Blue
-					</label>
-					<br>
-				<label class="radio-inline">
-					<input type="radio" name="optradio" value="#FF9900" id="orange">Orange
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="optradio" value="#33CC33" id="green" checked>Green
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="optradio" value="#9933FF" id="violet">Violet
-					</label>
+                                        <input type="radio" name="optradio" value="#FF7575" id="red">Red
+                                </label>
+                                <label class="radio-inline">
+                                        <input type="radio" name="optradio" value="#FDFD96" id="yellow">Yellow
+                                </label>
+                                <label class="radio-inline">
+                                        <input type="radio" name="optradio" value="#B4CFEC" id="blue">Blue
+                                        </label>
+                                        <br>
+                                <label class="radio-inline">
+                                        <input type="radio" name="optradio" value="#FFB347" id="orange">Orange
+                                </label>
+                                <label class="radio-inline">
+                                        <input type="radio" name="optradio" value="#77DD77" id="green" checked>Green
+                                </label>
+                                <label class="radio-inline">
+                                        <input type="radio" name="optradio" value="#B19CD9" id="violet">Violet
+                                </label>
+
 			</form>
 		</div>
 		<div class="form-group">
@@ -108,25 +103,26 @@ SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformTo
 
 		<div class="form-group">
 			<form role="form">
-				<label class="radio-inline">
-					<input type="radio" name="optradio" value="#FF3333" id="dia_red">Red
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="optradio" value="#FFFF00" id="dia_yellow">Yellow
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="optradio" value="#00CCFF" id="dia_blue">Blue
-					</label>
-					<br>
-				<label class="radio-inline">
-					<input type="radio" name="optradio" value="#FF9900" id="dia_orange">Orange
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="optradio" value="#33CC33" id="dia_green" checked>Green
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="optradio" value="#9933FF" id="dia_violet">Violet
-					</label>
+			<label for="red">Shape Color:</label><br>
+				 <label class="radio-inline">
+                                        <input type="radio" name="optradio" value="#FF7575" id="dia_red">Red
+                                </label>
+                                <label class="radio-inline">
+                                        <input type="radio" name="optradio" value="#FDFD96" id="dia_yellow">Yellow
+                                </label>
+                                <label class="radio-inline">
+                                        <input type="radio" name="optradio" value="#B4CFEC" id="dia_blue">Blue
+                                        </label>
+                                        <br>
+                                <label class="radio-inline">
+                                        <input type="radio" name="optradio" value="#FFB347" id="dia_orange">Orange
+                                </label>
+                                <label class="radio-inline">
+                                        <input type="radio" name="optradio" value="#77DD77" id="dia_green" checked>Green
+                                </label>
+                                <label class="radio-inline">
+                                        <input type="radio" name="optradio" value="#B19CD9" id="dia_violet">Violet
+                                        </label>
 			</form>
 		</div>
 		<br><button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">Advanced <span class="glyphicon glyphicon-chevron-down"></span></button>
@@ -247,22 +243,22 @@ SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformTo
 					<input type="radio" name="arrowOptRadio3" value="#333333" id="blackArrow" checked>Black
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio3" value="#FF0000" id="redArrow">Red
+					<input type="radio" name="arrowOptRadio3" value="#FF7575" id="redArrow">Red
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio3" value="#00CC00" id="greenArrow">Green
+					<input type="radio" name="arrowOptRadio3" value="#77DD77" id="greenArrow">Green
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio3" value="#FFFF00" id="yellowArrow">Yellow
+					<input type="radio" name="arrowOptRadio3" value="#FDFD96" id="yellowArrow">Yellow
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio3" value="#00CCFF" id="blueArrow">Blue
+					<input type="radio" name="arrowOptRadio3" value="#B4CFEC" id="blueArrow">Blue
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio3" value="#FF9900" id="orangeArrow">Orange
+					<input type="radio" name="arrowOptRadio3" value="#FFB347" id="orangeArrow">Orange
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="arrowOptRadio3" value="#9933FF" id="violetArrow">Violet
+					<input type="radio" name="arrowOptRadio3" value="#B19CD9" id="violetArrow">Violet
 				</label
 					<br>
 			</form>
@@ -429,7 +425,10 @@ SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformTo
 
 <script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
 <script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
-<%= javascript_include_tag "customjoint" %>
+<%= javascript_include_tag "lodash.min" %>
+<%= javascript_include_tag "backbone-min" %>
+<%= javascript_include_tag "joint" %>
+<%= javascript_include_tag "custom-shapes" %>
 <%= javascript_include_tag "bootstrap" %>
 <%= javascript_include_tag "joint.dia.command" %>
 <%= javascript_include_tag "joint.shapes.erd" %>

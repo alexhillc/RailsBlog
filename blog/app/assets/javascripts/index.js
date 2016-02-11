@@ -436,27 +436,27 @@ elm.prop('comment',com);
 
 if(document.getElementById('dia_green').checked) {
   elm.attr({
-    '.outer': { fill: '#33CC33', stroke: '#000000' }//green
+    '.outer': { fill: '#77DD77', stroke: '#000000' }//green
 	});
 	}else if(document.getElementById('dia_blue').checked) {
 	  elm.attr({
-	    '.outer': { fill: '#00CCFF', stroke: '#000000' }//blue
+	    '.outer': { fill: '#B4CFEC', stroke: '#000000' }//blue
 	}); 
 	}else if(document.getElementById('dia_red').checked) {
 	  elm.attr({
-	    '.outer': { fill: '#FF3333', stroke: '#000000' }//red
+	    '.outer': { fill: '#FF7575', stroke: '#000000' }//red
 	}); 
 	}else if(document.getElementById('dia_violet').checked) {
 	  elm.attr({
-	    '.outer': { fill: '#9933FF', stroke: '#000000' }//violet
+	    '.outer': { fill: '#B19CD9', stroke: '#000000' }//violet
 	}); 
 	}else if(document.getElementById('dia_yellow').checked) {
 	  elm.attr({
-	    '.outer': { fill: '#FFFF00', stroke: '#000000' }//yellow
+	    '.outer': { fill: '#FDFD96', stroke: '#000000' }//yellow
 	}); 
 	}else if(document.getElementById('dia_orange').checked) {
 	  elm.attr({
-	    '.outer': { fill: '#FF9900', stroke: '#000000' }//orange
+	    '.outer': { fill: '#FFB347', stroke: '#000000' }//orange
 	}); 
 }
 elm.resize(120, 120);			//now that the save button was clicked, 'display' the element

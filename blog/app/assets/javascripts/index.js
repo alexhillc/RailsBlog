@@ -5,7 +5,7 @@ var erd = joint.shapes.erd;
 var graph = new joint.dia.Graph();
 var paper = new joint.dia.Paper({
 	    el: $('#paper'),
-	    width: (screen.width-50),
+	    width: (screen.width-85),
 	    height: (screen.height-100),
 	    gridSize: 1,
 	    perpendicularLinks: false,

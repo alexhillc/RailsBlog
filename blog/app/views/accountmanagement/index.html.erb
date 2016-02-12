@@ -4,23 +4,21 @@
 
 <div class="form-signin">
 <%= link_to 'Home', root_path %>
-<br>
-<%= link_to 'Click here to change your password', {:controller => 'accountmanagement', :action => 'updatepassword'} %>
-<br>
+<br><br>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-3">
+			<div class="panel panel-default">
+				<div class="panel-heading"><h4>
+		<%= link_to 'Change Password', {:controller => 'accountmanagement', :action => 'updatepassword'} %><h4>
+				</div>
+				<div class="panel-body">
+				Click here to change your password.
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<% if current_user #IS AN ADMINISTRATOR TODO# %>
-<%= form_for User.new, :html => {:class => "form-signin"} do |f| %>
-	<h2 class="form-signin-heading">Create an Account</h2>
-	<%= f.label :email %>
-	<%= f.text_field :email, :class => 'form-control' %>
-	<br>
-	<%= f.label :password %>
-	<%= f.password_field :password, :class => 'form-control' %> 
-	<%= f.label :password_confirmation %>
-	<%= f.password_field :password_confirmation, :class => 'form-control' %>
-	<br>
-	<%=f.submit "Create Account", :class => 'btn btn-primary' %>
-<% end %>
-
-<%end%>
+</div>

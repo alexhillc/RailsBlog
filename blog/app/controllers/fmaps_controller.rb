@@ -13,13 +13,19 @@ end
 
 def show
 	if current_user
-		@fmap = Fmap.find(params[:id])
-		@zmap = Fmap.new
-			if current_user.email == @fmap.username
-				gon.id = Fmap.find(params[:id])
-			else
-				redirect_to "/fmaps"
-			end
+		if params[:id] != "0"
+			@fmap = Fmap.find(params[:id])
+			@zmap = Fmap.new
+				if current_user.email == @fmap.username
+					gon.id = @fmap
+				else
+					redirect_to "/fmaps"
+				end
+		else
+			@fmap = Fmap.new
+			@zmap = Fmap.new
+			gon.id = @zmap
+		end
 	else
 		redirect_to "/log-in"
 	end

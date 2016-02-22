@@ -31,16 +31,18 @@ var element = function(elm, x, y, label) {
 /********************************************************************************************************************************
 Handles onload function.  Draws relapse line in the center of the paper.
 *********************************************************************************************************************************/
-$( document ).ready(function() {
-	
-	//grab height and width of the paper(the 'canvas' in which the family map is displayed on)
-	var h = $('#paper').height();
-	var w = $('#paper').width();
-	
-	//draw the relapse line in center of the paper
-	var r_line = V('line',{x1: 0, y1: h/2, x2: w, y2: h/2, stroke: 'black'});
-	V(paper.viewport).append(r_line);
-});
+// Steve: Commented out for now, the consolidation of show/new needs extra stuff done
+// in the onload function, and it needs a value from the ruby controller, thus it's still inline
+//$( document ).ready(function() {
+//	
+//	//grab height and width of the paper(the 'canvas' in which the family map is displayed on)
+//	var h = $('#paper').height();
+//	var w = $('#paper').width();
+//	
+//	//draw the relapse line in center of the paper
+//	var r_line = V('line',{x1: 0, y1: h/2, x2: w, y2: h/2, stroke: 'black'});
+//	V(paper.viewport).append(r_line);
+//});
 
 /********************************************************************************************************************************
 Function is called when the Arrow Button is pressed. (NEW)
@@ -489,6 +491,11 @@ function save_to_database_prep(){
 	$('#passModal').modal('show');
 }
 
+function save_to_database_new_prep()
+{
+	$('#passNewModal').modal('show');
+}
+
 function save_proceed(){
 	var password = document.getElementById("pw").value;
 	var password2 = document.getElementById("pwCon").value;
@@ -501,6 +508,29 @@ function save_proceed(){
 	$('#passModal').modal('hide');
 	$('#saveModal').modal('show');
 }
+
+function save_proceed_new()
+{
+	var password = document.getElementById("pwNew").value;
+	var password2 = document.getElementById("pwConNew").value;
+	if(password.length<5 || password!=password2)
+	{
+		alert("Map Password error. Map Password must be at least five characters in length and match confirmation.");
+		return;
+	}
+	
+	document.getElementById("new_json").value = CryptoJS.AES.encrypt(JSON.stringify(graph.toJSON()),document.getElementById("pwNew").value);
+	
+	//set default values
+	document.getElementById("new_title").value = gon.id.title;
+	document.getElementById("new_family").value = gon.id.family;
+	document.getElementById("new_extra").value = gon.id.extra;
+	document.getElementById("new_notes").value = gon.id.notes;
+	document.getElementById("new_version").value = gon.id.version;
+	$('#passNewModal').modal('hide');
+	$('#saveNewModal').modal('show');
+}
+
 function div_save_hide()
 {
 	$('#saveModal').modal('hide');
@@ -517,6 +547,22 @@ function save_to_database()
 		$('#saveModal').modal('hide');
 	}
 }
+
+function save_to_database_as_new()
+{
+	title = document.getElementById("new_title").value;
+	if(title == ""){
+		alert("Please include a title before saving");
+	}
+	else{
+		alert('Family Map Saved');
+		$('#saveNewModal').modal('hide');
+		// Probably about here is where it would be nice to redirect
+		// to fix the issue of accidentally saving over another fmap
+		// $('#save_dropdown').show();
+	}
+}
+
 function getTextWidth(text, font) {
     // re-use canvas object for better performance
     var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
@@ -524,7 +570,8 @@ function getTextWidth(text, font) {
     context.font = font;
     var metrics = context.measureText(text);
     return metrics.width;
-};
+}
+
 function div_txt_show()
 {	
 	var password = document.getElementById("txtPW").value;
@@ -537,19 +584,37 @@ function div_txt_show()
 	$('#passTxtDownloadModal').modal('hide');
 	$('#txtModal').modal('show');
 }
+
 function div_txt_pw_show()
 {
 	$('#passTxtDownloadModal').modal('show');
 }
+
 function div_txt_imp_show()
 {
 	$('#passTxtUploadModal').modal('show');
 }
+
 function div_chooser_show()
 {
 	$('#passTxtUploadModal').modal('hide');
 	$('#txtImportModal').modal('show');
 }
+
+function make_graph()
+{
+	// if password is wrong this will fail so let the user know about it
+	try {
+		var decrypted = CryptoJS.AES.decrypt(gon.id.json, document.getElementById("dec").value);
+		graph.fromJSON(JSON.parse(decrypted.toString(CryptoJS.enc.Utf8)));
+		$('#decModal').modal('hide');
+	} catch(err) {
+		$('#decModalLabel').html("Incorrect password, try again.").fadeIn(500).fadeOut(500).fadeIn(500)
+			.fadeOut(500).fadeIn(500);
+		$('#dec').val("").focus();
+	}
+}
+
 function download()
 {
 	var fileNameToSaveAs = document.getElementById("fileName").value;
@@ -602,4 +667,11 @@ function loadFileAsText()
 	};
 	fileReader.readAsText(fileToLoad, "UTF-8");
 	$('#txtImportModal').modal('hide');
+}
+
+// If the user closes the modal dialog for the decryption key, do not allow them to save
+// the fmap over the one it tried to load
+function remove_save()
+{
+	$('#save_dropdown').hide();
 }

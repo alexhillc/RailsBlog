@@ -668,10 +668,3 @@ function loadFileAsText()
 	fileReader.readAsText(fileToLoad, "UTF-8");
 	$('#txtImportModal').modal('hide');
 }
-
-// If the user closes the modal dialog for the decryption key, do not allow them to save
-// the fmap over the one it tried to load
-function remove_save()
-{
-	$('#save_dropdown').hide();
-}

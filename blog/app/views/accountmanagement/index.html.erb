@@ -2,7 +2,7 @@
 <%= stylesheet_link_tag "signin" %>
 
 
-<div class="form-signin">
+<div class="container-full">
 <%= link_to 'Home', root_path %>
 <br><br>
 
@@ -11,7 +11,7 @@
 		<div class="col-md-3">
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4>
-		<%= link_to 'Change Password', {:controller => 'accountmanagement', :action => 'updatepassword'} %><h4>
+		<%= link_to 'Change Password', {:controller => 'accountmanagement', :action => 'updatepassword'} %></h4>
 				</div>
 				<div class="panel-body">
 				Click here to change your password.
@@ -19,6 +19,20 @@
 			</div>
 		</div>
 	</div>
+	<% if current_user.try(:admin?) %>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4><%= link_to 'Create User Account', {:controller => 'accountmanagement', :action => 'createaccount'} %></h4>
+				</div>
+				<div class="panel-body">
+				Click here to create a new user account.
+				</div>
+			</div>
+		</div>
+	</div>
+	<% end %>
 </div>
 
 </div>

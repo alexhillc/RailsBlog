@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'accountmanagement/createaccount'
+
   devise_for :users
   get 'admin/index'
 
@@ -29,9 +31,12 @@ Rails.application.routes.draw do
 	
 	get '/about' => 'fmaps#about'
 
-  get 'accountmanagement/index'
+  get 'accountmanagement/' => 'accountmanagement#index'
   get 'accountmanagement/updatepassword'
   post 'accountmanagement/updatepassword' => 'accountmanagement#update'
+  get 'accountmanagement/createaccount'
+  post 'accountmanagement/createaccount' => 'accountmanagement#create'
+  post 'password_resets/:id' => 'password_resets#update'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

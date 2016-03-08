@@ -18,16 +18,24 @@ class User < ActiveRecord::Base
 	end
   
 	def encrypt_password
-		self.password_salt = BCrypt::Engine.generate_salt
-		self.password_hash = BCrypt::Engine.hash_secret(password, password_salt)
+		if password.present?
+			self.password_salt = BCrypt::Engine.generate_salt
+			self.password_hash = BCrypt::Engine.hash_secret(password, password_salt)
+		end
 	end
 
-	def send_password_reset
-		generate_token(:password_reset_token)
-		self.password_reset_sent_at = Time.zone.now
-		save!(validate: false)
-		UserMailer.password_reset(self).deliver
-	end
+	# This changes the password only when the password is changed. As opposed to before_save
+	# which always generates a new salt and requires the password whenever updating the user
+	#def password=(new_password)
+	#	encrypt_password
+	#end
+
+	 def send_password_reset
+	 	generate_token(:password_reset_token)
+	 	self.password_reset_sent_at = Time.zone.now
+	 	save!(validate: false)
+	 	UserMailer.password_reset(self).deliver
+	 end
 
 	def self.authenticate(email, password)
 		user = User.where(email: email).first

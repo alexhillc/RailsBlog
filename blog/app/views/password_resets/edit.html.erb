@@ -1,4 +1,4 @@
-<h1>Reset Password</h1>
+<!--<h1>Reset Password</h1>
 
 <%= form_for @user, :url => password_reset_path(params[:id]) do |f| %>
   <% if @user.errors.any? %>
@@ -21,3 +21,19 @@
   </div>
   <div class="actions"><%= f.submit "Update Password" %></div>
 <% end %>
+-->
+
+
+<%= stylesheet_link_tag "bootstrap" %>
+<%= stylesheet_link_tag "signin" %>
+
+<%=form_tag password_reset_path, :class => 'form-signin' do%>
+<%= link_to "Back", "/" %>
+<h2 class="form-signin-heading">Change Your Password</h2>
+  <%=label_tag "New Password" %>
+  <%=password_field_tag :newpassword, nil, :class => 'form-control' %>
+  <%=label_tag 'Confirm Password' %>
+  <%=password_field_tag :newpassword2, nil, :class => 'form-control' %>
+  <br>
+<%=submit_tag "Change Password", :class => "btn btn-primary" %>
+<%end%>

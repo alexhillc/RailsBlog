@@ -23,6 +23,7 @@ class SessionsController < ApplicationController
 
 	def destroy
 		session[:user_id] = nil
+		sign_out @user # for devise
 		flash[:notice] = "You've been logged out successfully."
 		redirect_to "/"
 	end

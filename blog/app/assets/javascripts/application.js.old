@@ -15,5 +15,5 @@
 //= require customjoint
 //= require joint.shapes.erd
 //= require joint.dia.command
-//= require jquery-1.11.1.min
+//= require jquery.min
 //= require bootstrap

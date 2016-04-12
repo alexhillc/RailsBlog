@@ -1,11 +1,10 @@
 var uID;
 var jsonString;
 
-var erd = joint.shapes.erd;
 var graph = new joint.dia.Graph();
 var paper = new joint.dia.Paper({
 	    el: $('#paper'),
-	    width: (screen.width-85),
+	    width: (screen.width-50),
 	    height: (screen.height-100),
 	    gridSize: 1,
 	    perpendicularLinks: false,
@@ -18,31 +17,20 @@ var paper = new joint.dia.Paper({
 	$('#undo').on('click', _.bind(commandManager.undo, commandManager));
 	$('#redo').on('click', _.bind(commandManager.redo, commandManager));
 	
-/*I dont know why this exists, so i commented it out
-var element = function(elm, x, y, label) {
-    var cell = new elm({ 
-    	position: { x: x, y: y }, 
-    	   attrs: { text: { text: label }}});
-    graph.addCell(cell);
-    return cell;
-};
-*/
 
 /********************************************************************************************************************************
 Handles onload function.  Draws relapse line in the center of the paper.
 *********************************************************************************************************************************/
-// Steve: Commented out for now, the consolidation of show/new needs extra stuff done
-// in the onload function, and it needs a value from the ruby controller, thus it's still inline
-//$( document ).ready(function() {
-//	
-//	//grab height and width of the paper(the 'canvas' in which the family map is displayed on)
-//	var h = $('#paper').height();
-//	var w = $('#paper').width();
-//	
-//	//draw the relapse line in center of the paper
-//	var r_line = V('line',{x1: 0, y1: h/2, x2: w, y2: h/2, stroke: 'black'});
-//	V(paper.viewport).append(r_line);
-//});
+$( document ).ready(function() {
+	
+	//grab height and width of the paper(the 'canvas' in which the family map is displayed on)
+	var h = $('#paper').height();
+	var w = $('#paper').width();
+	
+	//draw the relapse line in center of the paper
+	var r_line = V('line',{x1: 0, y1: h/2, x2: w, y2: h/2, stroke: 'black'});
+	V(paper.viewport).append(r_line);
+});
 
 /********************************************************************************************************************************
 Function is called when the Arrow Button is pressed. (NEW)
@@ -51,26 +39,39 @@ When two are selected, it will popup the arrow dialog box for editing the link b
 *********************************************************************************************************************************/
 var linking = false;
 var linkSource, linkTarget;
+var linkSourceText, linkTargetText;
+var firstLink = true;
 function clickToLink(){
 
   if(!linking){
+  	if(firstLink){
+  	  alert("Click on two different elements to create an arrow, or you can cancel by clicking the Cancel button to the right.");
+  	  firstLink = false;
+  	}
 	  linking = true;			//global variable to allow pointerclick event(below) to run
 	  linkSource = -1;			//holds the ID of the source element
 	  linkTarget = -1;			//holds the ID of the target element
+	  linkTargetText = "";
+	  linkSourceText = "";
 	  
 	  $('.navbar-btn').prop('disabled', true);		//disabled all buttons on nav bar while linking is enabled 
 	  $('#arrowOptionsButton').prop('disabled', false);	//except for the Add Arrow button
   	  $('#arrowOptionsButton').html('Cancel');		//change arrow button to Cancel, to cancel linking
 	  $('.element').css('cursor','pointer');		//so the user knows its clickable
-	  $('#arrow_note').css('display', 'inline-block');
   	}else{				//handles cancel button
   	  linking = false;
-  	  if(linkSource != -1){paper.findViewByModel(linkSource).unhighlight(linkSource);}
-  	  if(linkTarget != -1){paper.findViewByModel(linkTarget).unhighlight(linkTarget);}
+
+  	  if(linkSource != -1){
+  	  	paper.findViewByModel(linkSource).unhighlight(linkSource);
+		graph.getCell(linkSource).attr({text: {text: linkSourceText}});
+  	  }
+  	  if(linkTarget != -1){
+  	  	paper.findViewByModel(linkTarget).unhighlight(linkTarget);
+		graph.getCell(linkTarget).attr({text: {text: linkTargetText}});
+  	  }
   	  $('#arrowOptionsButton').html('Add Arrow');
   	  $('.navbar-btn').prop('disabled', false);
 	  $('.element').css('cursor','move');
-	  $('#arrow_note').css('display', 'none');
 	} 	
 }
 
@@ -78,17 +79,19 @@ function clickToLink(){
 When linking is true, allow the user to click on an element for linking. Linking is turned on when 'Add Arrow' button
 is pressed.
 *********************************************************************************************************************************/
-paper.on('cell:pointerclick', function(cellView, evt, x, y){
+paper.on('cell:pointerdown', function(cellView, evt, x, y){
 	  if(linking){
 
 		      var cell = cellView.model.id;
 
 		      if(cell == linkSource){				//if the user clicks on a cell that was already highlighted
 		      		paper.findViewByModel(linkSource).unhighlight(linkSource); //unhighlight and
+		      		graph.getCell(linkSource).attr({text: {text: linkSourceText}});
 		      		linkSource = -1;					//default back to -1
 		      }else 
 		      if(cell == linkTarget){				//same as above for linkTarget
 		      		paper.findViewByModel(linkTarget).unhighlight(linkTarget); 
+		      		graph.getCell(linkTarget).attr({text: {text: linkTargetText}});
 		      		linkTarget = -1;
 		      }else 
 		      if(linkSource == -1 && linkTarget != cell){	//make sure source is -1 and that the target is not the same as the source
@@ -96,14 +99,18 @@ paper.on('cell:pointerclick', function(cellView, evt, x, y){
 		          if(!(graph.getCell(cell).isLink())){		//make sure its not a link
 		      	    linkSource = cell;				
 		      	    paper.findViewByModel(cell).highlight(cell);//highlight for looks
-		      	  }
+		      	    linkSourceText = graph.getCell(linkSource).attr('text/text') || ""; 
+		      	    graph.getCell(linkSource).attr({text: {text: '1'}});
+		      	}
 		      	  
 		      }else 
 		      if(linkTarget == -1 && linkSource != cell){	//make sure target is -1 and that the source is not the same as the target
 		      
 		         if(!(graph.getCell(cell).isLink())){		
-		      	  linkTarget = cell;
-		      	  paper.findViewByModel(cell).highlight(cell);
+		      	   linkTarget = cell;
+		      	   paper.findViewByModel(cell).highlight(cell);
+		      	   linkTargetText = graph.getCell(linkTarget).attr('text/text') || "";
+		      	   graph.getCell(linkTarget).attr({text: {text: '2'}});
 		      	}
 		      
 		      }//end if-else nest
@@ -119,11 +126,11 @@ Add a link to the graph:
 linkSource:	reference to the 1st element(source)
 linkTarget:   	reference to the 2nd element(target)
 col:     	color of the line
-heads:   	integer refering to number of arrow heads (0,1,2)
+heads:   	integer referring to number of arrow heads (0,1,2)
 dashed:  	boolean for if the link is dashed or not
 *********************************************************************************************************************************/
 function add_link(col, heads, dashed){
-    l = new erd.Line({
+    l = new joint.dia.Link({
     	source: {id: linkSource},
     	target: {id: linkTarget},
     	connector: {name: 'normal'},
@@ -159,13 +166,12 @@ Cancel linking process.  Unhighlight all elements, change values back to default
 *********************************************************************************************************************************/
 function cancel_linking(){
 	paper.findViewByModel(linkSource).unhighlight(linkSource);
+	graph.getCell(linkSource).attr({text: {text: linkSourceText}});
 	paper.findViewByModel(linkTarget).unhighlight(linkTarget);
-	linkSource = -1;
-	linkTarget = -1;
+	graph.getCell(linkTarget).attr({text: {text: linkTargetText}});
 	$('.basic').css('cursor','move');
 	$('#arrowOptionsButton').html('Add Arrow');
 	$('.navbar-btn').prop('disabled', false);
-	 $('#arrow_note').css('display', 'none');
 	linking=false;							//prevents the pointerclick event from running
 }
 
@@ -177,12 +183,12 @@ function add_oval(){
 	$('#myModal').modal('show');
 	document.getElementById("green").checked = true;	//set default checkbox back to green
 	document.getElementById("normal").checked = true;	//set default text-type back to default - normal
-    document.getElementById("name").value = "";			//Set text fields as empty.
+        document.getElementById("name").value = "";			//Set text fields as empty.
 	document.getElementById("comments").value = "";		//Set text fields as empty.
 
-	var oval = new joint.shapes.basic.TextBlockC({
+	var oval = new joint.shapes.basic.Ellipse({
                 position: { x:0, y:0 },
-				size: { width: 0, height: 0 }			//size to 0,0 so it will not show while setting it up							
+		size: { width: 0, height: 0 }			//size to 0,0 so it will not show while setting it up						
         });
 	
 	uID = oval.id;				
@@ -190,7 +196,7 @@ function add_oval(){
 }
 
 /********************************************************************************************************************************
-Add a Diamond shape to the graph.  Ovals contain text, color and text style.
+Add a Diamond shape to the graph.  Diamonds contain text, color and text style.
 Function is called when Add Diamond button is pressed.
 *********************************************************************************************************************************/
 function add_diamond(){
@@ -204,12 +210,20 @@ function add_diamond(){
 	document.getElementById("ashamed").checked = false;
 	document.getElementById("guilty").checked = false;
 	document.getElementById("lonely").checked = false;
-    document.getElementById("comments2").value = "";
+	//except for the Green
+	document.getElementById("dia_green").checked = true;
+    	document.getElementById("comments2").value = "";
 
-	var diamond = new joint.shapes.basic.TextBlockD({
-                position: { x:0, y:0 },
-                size: { width: 0, height: 0 }			//size to 0 so it will not be displayed right away
-        });
+	var diamond = new joint.shapes.basic.Path({
+    		size: { width: 0, height: 0 },
+    		position: {x: 0, y:0},
+    		attrs: { path: { d: 'M 30 0 L 60 30 30 60 0 30 z' },
+        		 text: {
+            			'ref-x': .5,
+            			'ref-y': .55,
+            			'y-alignment': 'middle'
+     				}}
+	});
 
 	uID = diamond.id;
 	graph.addCell(diamond);
@@ -222,18 +236,16 @@ function add_square(){
 	$('#myModal').modal('show');	//display dialog box to edit the shape's information
 	document.getElementById("green").checked = true;	//set default checkbox back to green
 	document.getElementById("normal").checked = true;	//set default text-type back to default - normal
-    document.getElementById("name").value = "";			//Set text fields as empty.
+    	document.getElementById("name").value = "";		//Set text fields as empty.
 	document.getElementById("comments").value = "";		//Set text fields as empty.
 
-	var textBlock = new joint.shapes.basic.TextBlock({	//New instance of the Square shape.  
-                position: { x:0, y:0 },			//Set position where shape will be spawned
-		size:     { width: 0, height: 0 },		//Set size of shape
-        content:  "",							//The text content that is displayed inside of the shape.
-		comment:  ""							//Comment is the textbox under the Advanced button
+	var rect = new joint.shapes.basic.Rect({	//New instance of the Square shape.  
+                position: { x:0, y:0 },				//Set position where shape will be spawned
+		size:     { width: 0, height: 0 }		//Set size of shape
         });
         
-	uID = textBlock.id;				//store ID value of the element just created. uID is used to determine which shape the dialog box is editing/changing
-	graph.addCell(textBlock);		//add shape to the graphto be displayed
+	uID = rect.id;				//store ID value of the element just created. uID is used to determine which shape the dialog box is editing/changing
+	graph.addCell(rect);		//add shape to the graphto be displayed
 }
 
 /********************************************************************************************************************************
@@ -241,28 +253,27 @@ Handles the doubleclick of an element.  It will grab the data from this element 
 to be edited and saved.
 *********************************************************************************************************************************/
 paper.on('cell:pointerdblclick', function(cellView, evt, x, y) { 
+	if(!linking){
 		var elm = graph.getCell(cellView.model.id);			//get element that was clicked on
 		if(!elm.isLink()){
-		var txt = elm.prop('content');						//grab contect from element
-		var com = elm.prop('comment');						//grab comment from element
-		var color = elm.attr('rect/fill') || elm.attr('.outer/fill');	//get color value back from element
-		$("input[name=optradio][value="+ color +"]").prop('checked', true);	//check radio button of elements color
-
-		txt = txt.replace(/<strong>|<\/strong>|<em>|<\/em>/g, "");	//we just want the text to show on the field, not the tags
+		var txt = elm.attr('text/text');				//grab contect from element
+		var com = elm.prop('comment');					//grab comment from element
+		var color = elm.attr('rect/fill') || elm.attr('ellipse/fill') || elm.attr('path/fill');	//get color value back from element
 
 		var type = elm.prop('type');		
-		if (type=='basic.TextBlock' || type=='basic.TextBlockC')	//if the shape  is a square or oval
-		{
-			$("input[name=optradio3][value="+ getTextType(elm.prop('content')) +"]").prop('checked', true);
+		if (type=='basic.Rect' || type=='basic.Ellipse'){	//if the shape  is a square or oval
+		
+			$("input[name=optradio][value="+ color +"]").prop('checked', true);	//check radio button of element's color
+			txt = txt.replace(/\n/g, " ");	//we just want the text to show on the field, not the tags
+			$("input[name=optradio3][value="+ getStyle(elm) +"]").prop('checked', true);	//check the font-style of element
 			document.getElementById("name").value = txt;
 			document.getElementById("comments").value = com;
 
 			uID = cellView.model.id;
 			div_show();
-		}else if(type=='basic.TextBlockD')				//if the shape is a Diamond
-		{
+		}else if(type=='basic.Path'){ 			//if the shape is a Diamond
 			document.getElementById("comments2").value = com;
-		
+			$("input[name=radioDiaColor][value="+ color +"]").prop('checked', true);	//check radio button of element's color
 			uID = cellView.model.id;
 			
 			document.getElementById("sad").checked = elm.prop('sad');
@@ -278,19 +289,16 @@ paper.on('cell:pointerdblclick', function(cellView, evt, x, y) {
 		}
 	  }
     }
+    }
 );
 
-/********************************************************************************************************************************
-Only called from the double click event.  Checks the content string for strong OR em tags.  Returns the value from 0-2 depending
-on result so the Text Type radio buttons are appropriately checked when modal opens.
-*********************************************************************************************************************************/
-function getTextType(cont){
-	if(cont.indexOf('<strong>') >= 0 && cont.indexOf('<\/strong>') >= 0){
-		return "1";
-	}else if(cont.indexOf('<em>') >= 0 && cont.indexOf('<\/em>') >= 0){
-		return "2";
+function getStyle(elm){
+	if(elm.attr('text/font-style') == 'italic'){
+		return 2;
+	}else if(elm.attr('text/font-weight') == 'bold'){
+		return 1;
 	}else{
-		return "0";
+		return 0;
 	}
 }
 
@@ -303,21 +311,30 @@ function changeText(){
 	var elm = graph.getCell(uID);
 	var type = elm.prop('type');
 	var x = Math.floor(getTextWidth(textBoxText, "14pt arial")) + 1;	//get rounded width of text inside element.
-	var sLen = 208;
-	var oLen = 110;
-	
-	//Used for resizing the element depending on the amount of text in the textbox*
-	if(type=="basic.TextBlock"){				//if the element is a square(208 per line)
-		elm.resize(170, 20*(Math.ceil(x/sLen)));
-	}else{							//else meaning it is an Oval
-		elm.resize(170, 20*(Math.ceil(x/oLen)));
+	var h,w ;
+
+	//determine width and height of the textbox inside of the element, so the text fits nicely inside of the shape.
+	if(type == "basic.Rect"){
+		h = 16;
+		w = 160;
+	}else{
+		h = 20;
+		w = 135;
 	}
 	
+	//If text is too long, the text will need to be wrapped to fit inside of the element.
+	var wrappedText = joint.util.breakText(textBoxText, {
+    		width: w
+	});
 	var style = parseInt($('input[name="optradio3"]:checked').val());
+	elm.attr({text: {'font-weight': 'normal', 'font-style': 'normal'}});
 	switch(style){
-	  case(1): {elm.prop('content', '<strong>' + textBoxText +'</strong>'); break;}	//BOLD text
-	  case(2): {elm.prop('content', '<em>' + textBoxText +'</em>'); break;}		//ITALICIZED text
-	  default: {elm.prop('content', textBoxText);break;}				//Normal text
+	  case(1): {elm.attr({text: {text: wrappedText, 'font-weight': 'bold'}});  //BOLD text
+	  	    elm.resize(180, h*(Math.ceil(x/w))); break;}				
+	  case(2): {elm.attr({text: {text: wrappedText, 'font-style': 'italic'}}); //ITALICIZED text
+	            elm.resize(170, h*(Math.ceil(x/w)));  break;}			
+	  default: {elm.attr({text: {text: wrappedText}}); 			//Normal text
+	            elm.resize(170, h*(Math.ceil(x/w))); break;}			
 		}//end switch	
 			
 	elm.prop('comment', document.getElementById("comments").value);	
@@ -336,18 +353,18 @@ function div_hide(){
 	changeText();
 	var elm = graph.getCell(uID);
 	var type = elm.prop('type');
-	if(type=="basic.TextBlock")					//IF the element is a RECTANGLE or OVAL - change attr 
+	if(type=="basic.Rect")						//IF the element is a RECTANGLE or OVAL - change attr 
 	{
 		var color = $('input[name="optradio"]:checked').val();	//get color from radio checked.
 		elm.attr({
-		    rect: { fill: color, stroke: '#000000' }
+		     rect: { fill: color, stroke: '#000000'}
 		});
 
 	}else									//IF the element is an OVAL - change attr 
 	{
 		var color = $('input[name="optradio"]:checked').val();
 		elm.attr({
-		    '.outer': { fill: color, stroke: '#000000' }
+		    ellipse: { fill: color, stroke: '#000000' }
 		});
 	}
 	$('#myModal').modal('hide');
@@ -363,63 +380,63 @@ var textInBox = "";
 var numChecked = 0;
 if(document.getElementById('sad').checked){
 	numChecked++;
-	textInBox+="Sad ";
+	textInBox+="Sad\n";
 	elm.prop('sad',true);
    }else{
 	elm.prop('sad',false);
 }
 if(document.getElementById('angry').checked){
 	numChecked++;
-	textInBox+="Angry ";
+	textInBox+="Angry\n";
 	elm.prop('angry',true);
    }else{
 	elm.prop('angry',false);
 }
 if(document.getElementById('happy').checked){
 	numChecked++;
-	textInBox+="Happy ";
+	textInBox+="Happy\n";
 	elm.prop('happy',true);
    }else{
 	elm.prop('happy',false);
 }
 if(document.getElementById('aroused').checked){
 	numChecked++;
-	textInBox+="Aroused ";
+	textInBox+="Aroused\n";
 	elm.prop('aroused',true);
    }else{
 	elm.prop('aroused',false);
 }
 if(document.getElementById('worried').checked){
 	numChecked++;
-	textInBox+="Worried ";
+	textInBox+="Worried\n";
 	elm.prop('worried',true);
    }else{
 	elm.prop('worried',false);
 }
 if(document.getElementById('discomfort').checked){
 	numChecked++;
-	textInBox+="Discomfort ";
+	textInBox+="Discomfort\n";
 	elm.prop('discomfort',true);
    }else{
 	elm.prop('discomfort',false);
 }
 if(document.getElementById('ashamed').checked){
 	numChecked++;
-	textInBox+="Ashamed ";
+	textInBox+="Ashamed\n";
 	elm.prop('ashamed',true);
    }else{
 	elm.prop('ashamed',false);
 }
 if(document.getElementById('lonely').checked){
 	numChecked++;
-	textInBox+="Lonely ";
+	textInBox+="Lonely\n";
 	elm.prop('lonely',true);
    }else{
 	elm.prop('lonely',false);
 }
 if(document.getElementById('guilty').checked){
 	numChecked++;
-	textInBox+="Guilty ";
+	textInBox+="Guilty\n";
 	elm.prop('guilty',true);
    }else{
 	elm.prop('guilty',false);
@@ -429,39 +446,18 @@ if(numChecked > 3){
 	return;
 }
 
-textInBox = textInBox.trim();
-textInBox = textInBox.replace(/ /g, " <br> ");			//Replace all spaces with a plus sign
-elm.prop('content',textInBox);
+elm.attr({text: {text: textInBox}});
 
 var com = document.getElementById('comments2').value;
+var color = $('input[name="radioDiaColor"]:checked').val();
 elm.prop('comment',com);
 
-if(document.getElementById('dia_green').checked) {
   elm.attr({
-    '.outer': { fill: '#77DD77', stroke: '#000000' }//green
+    'path': { fill: color, stroke: '#000000' }
 	});
-	}else if(document.getElementById('dia_blue').checked) {
-	  elm.attr({
-	    '.outer': { fill: '#B4CFEC', stroke: '#000000' }//blue
-	}); 
-	}else if(document.getElementById('dia_red').checked) {
-	  elm.attr({
-	    '.outer': { fill: '#FF7575', stroke: '#000000' }//red
-	}); 
-	}else if(document.getElementById('dia_violet').checked) {
-	  elm.attr({
-	    '.outer': { fill: '#B19CD9', stroke: '#000000' }//violet
-	}); 
-	}else if(document.getElementById('dia_yellow').checked) {
-	  elm.attr({
-	    '.outer': { fill: '#FDFD96', stroke: '#000000' }//yellow
-	}); 
-	}else if(document.getElementById('dia_orange').checked) {
-	  elm.attr({
-	    '.outer': { fill: '#FFB347', stroke: '#000000' }//orange
-	}); 
-}
-elm.resize(120, 120);			//now that the save button was clicked, 'display' the element
+ 
+elm.prop('size/width', 120);
+elm.prop('size/height', 120);		//now that the save button was clicked, 'display' the element
 $('#diaModal').modal('hide');
 }
 
@@ -491,11 +487,6 @@ function save_to_database_prep(){
 	$('#passModal').modal('show');
 }
 
-function save_to_database_new_prep()
-{
-	$('#passNewModal').modal('show');
-}
-
 function save_proceed(){
 	var password = document.getElementById("pw").value;
 	var password2 = document.getElementById("pwCon").value;
@@ -508,29 +499,6 @@ function save_proceed(){
 	$('#passModal').modal('hide');
 	$('#saveModal').modal('show');
 }
-
-function save_proceed_new()
-{
-	var password = document.getElementById("pwNew").value;
-	var password2 = document.getElementById("pwConNew").value;
-	if(password.length<5 || password!=password2)
-	{
-		alert("Map Password error. Map Password must be at least five characters in length and match confirmation.");
-		return;
-	}
-	
-	document.getElementById("new_json").value = CryptoJS.AES.encrypt(JSON.stringify(graph.toJSON()),document.getElementById("pwNew").value);
-	
-	//set default values
-	document.getElementById("new_title").value = gon.id.title;
-	document.getElementById("new_family").value = gon.id.family;
-	document.getElementById("new_extra").value = gon.id.extra;
-	document.getElementById("new_notes").value = gon.id.notes;
-	document.getElementById("new_version").value = gon.id.version;
-	$('#passNewModal').modal('hide');
-	$('#saveNewModal').modal('show');
-}
-
 function div_save_hide()
 {
 	$('#saveModal').modal('hide');
@@ -547,22 +515,6 @@ function save_to_database()
 		$('#saveModal').modal('hide');
 	}
 }
-
-function save_to_database_as_new()
-{
-	title = document.getElementById("new_title").value;
-	if(title == ""){
-		alert("Please include a title before saving");
-	}
-	else{
-		alert('Family Map Saved');
-		$('#saveNewModal').modal('hide');
-		// Probably about here is where it would be nice to redirect
-		// to fix the issue of accidentally saving over another fmap
-		// $('#save_dropdown').show();
-	}
-}
-
 function getTextWidth(text, font) {
     // re-use canvas object for better performance
     var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
@@ -570,8 +522,7 @@ function getTextWidth(text, font) {
     context.font = font;
     var metrics = context.measureText(text);
     return metrics.width;
-}
-
+};
 function div_txt_show()
 {	
 	var password = document.getElementById("txtPW").value;
@@ -584,37 +535,19 @@ function div_txt_show()
 	$('#passTxtDownloadModal').modal('hide');
 	$('#txtModal').modal('show');
 }
-
 function div_txt_pw_show()
 {
 	$('#passTxtDownloadModal').modal('show');
 }
-
 function div_txt_imp_show()
 {
 	$('#passTxtUploadModal').modal('show');
 }
-
 function div_chooser_show()
 {
 	$('#passTxtUploadModal').modal('hide');
 	$('#txtImportModal').modal('show');
 }
-
-function make_graph()
-{
-	// if password is wrong this will fail so let the user know about it
-	try {
-		var decrypted = CryptoJS.AES.decrypt(gon.id.json, document.getElementById("dec").value);
-		graph.fromJSON(JSON.parse(decrypted.toString(CryptoJS.enc.Utf8)));
-		$('#decModal').modal('hide');
-	} catch(err) {
-		$('#decModalLabel').html("Incorrect password, try again.").fadeIn(500).fadeOut(500).fadeIn(500)
-			.fadeOut(500).fadeIn(500);
-		$('#dec').val("").focus();
-	}
-}
-
 function download()
 {
 	var fileNameToSaveAs = document.getElementById("fileName").value;
@@ -668,3 +601,4 @@ function loadFileAsText()
 	fileReader.readAsText(fileToLoad, "UTF-8");
 	$('#txtImportModal').modal('hide');
 }
+;

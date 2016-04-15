@@ -486,7 +486,10 @@ function remove_dia(){
 function save_to_database_prep(){
 	$('#passModal').modal('show');
 }
-
+function save_to_database_new_prep()
+{
+	$('#passNewModal').modal('show');
+}
 function save_proceed(){
 	var password = document.getElementById("pw").value;
 	var password2 = document.getElementById("pwCon").value;
@@ -498,6 +501,27 @@ function save_proceed(){
 	document.getElementById("fmap_json").value = CryptoJS.AES.encrypt(JSON.stringify(graph.toJSON()),document.getElementById("pw").value);
 	$('#passModal').modal('hide');
 	$('#saveModal').modal('show');
+}
+function save_proceed_new()
+{
+	var password = document.getElementById("pwNew").value;
+	var password2 = document.getElementById("pwConNew").value;
+	if(password.length<5 || password!=password2)
+	{
+		alert("Map Password error. Map Password must be at least five characters in length and match confirmation.");
+		return;
+	}
+	
+	document.getElementById("new_json").value = CryptoJS.AES.encrypt(JSON.stringify(graph.toJSON()),document.getElementById("pwNew").value);
+	
+	//set default values
+	document.getElementById("new_title").value = gon.id.title;
+	document.getElementById("new_family").value = gon.id.family;
+	document.getElementById("new_extra").value = gon.id.extra;
+	document.getElementById("new_notes").value = gon.id.notes;
+	document.getElementById("new_version").value = gon.id.version;
+	$('#passNewModal').modal('hide');
+	$('#saveNewModal').modal('show');
 }
 function div_save_hide()
 {
@@ -513,6 +537,20 @@ function save_to_database()
 	else{
 		alert('Family Map Saved');
 		$('#saveModal').modal('hide');
+	}
+}
+function save_to_database_as_new()
+{
+	title = document.getElementById("new_title").value;
+	if(title == ""){
+		alert("Please include a title before saving");
+	}
+	else{
+		alert('Family Map Saved');
+		$('#saveNewModal').modal('hide');
+		// Probably about here is where it would be nice to redirect
+		// to fix the issue of accidentally saving over another fmap
+		// $('#save_dropdown').show();
 	}
 }
 function getTextWidth(text, font) {
@@ -547,6 +585,19 @@ function div_chooser_show()
 {
 	$('#passTxtUploadModal').modal('hide');
 	$('#txtImportModal').modal('show');
+}
+function make_graph()
+{
+	// if password is wrong this will fail so let the user know about it
+	try {
+		var decrypted = CryptoJS.AES.decrypt(gon.id.json, document.getElementById("dec").value);
+		graph.fromJSON(JSON.parse(decrypted.toString(CryptoJS.enc.Utf8)));
+		$('#decModal').modal('hide');
+	} catch(err) {
+		$('#decModalLabel').html("Incorrect password, try again.").fadeIn(500).fadeOut(500).fadeIn(500)
+			.fadeOut(500).fadeIn(500);
+		$('#dec').val("").focus();
+	}
 }
 function download()
 {

@@ -1,11 +1,12 @@
 var uID;
 var jsonString;
+var r_line;
 
 var graph = new joint.dia.Graph();
 var paper = new joint.dia.Paper({
 	    el: $('#paper'),
-	    width: (screen.width-50),
-	    height: (screen.height-100),
+	    width: ($(window).width() - 50),
+	    height: ($(window).height() - 100),
 	    gridSize: 1,
 	    perpendicularLinks: false,
 	    linkConnectionPoint: joint.util.shapePerimeterConnectionPoint,
@@ -16,7 +17,6 @@ var paper = new joint.dia.Paper({
 	
 	$('#undo').on('click', _.bind(commandManager.undo, commandManager));
 	$('#redo').on('click', _.bind(commandManager.redo, commandManager));
-	
 
 /********************************************************************************************************************************
 Handles onload function.  Draws relapse line in the center of the paper.
@@ -28,7 +28,7 @@ $( document ).ready(function() {
 	var w = $('#paper').width();
 	
 	//draw the relapse line in center of the paper
-	var r_line = V('line',{x1: 0, y1: h/2, x2: w, y2: h/2, stroke: 'black'});
+	r_line = V('line',{x1: 0, y1: h/2, x2: w, y2: h/2, stroke: 'black'});
 	V(paper.viewport).append(r_line);
 });
 
@@ -172,7 +172,7 @@ function cancel_linking(){
 	$('.basic').css('cursor','move');
 	$('#arrowOptionsButton').html('Add Arrow');
 	$('.navbar-btn').prop('disabled', false);
-	linking=false;							//prevents the pointerclick event from running
+	linking=false;							//prevents the pointerclick for linking from running
 }
 
 /********************************************************************************************************************************
@@ -214,16 +214,8 @@ function add_diamond(){
 	document.getElementById("dia_green").checked = true;
     	document.getElementById("comments2").value = "";
 
-	var diamond = new joint.shapes.basic.Path({
-    		size: { width: 0, height: 0 },
-    		position: {x: 0, y:0},
-    		attrs: { path: { d: 'M 30 0 L 60 30 30 60 0 30 z' },
-        		 text: {
-            			'ref-x': .5,
-            			'ref-y': .55,
-            			'y-alignment': 'middle'
-     				}}
-	});
+	var diamond = new joint.shapes.basic.Diamond({
+    		position: {x: 10, y: 10}});
 
 	uID = diamond.id;
 	graph.addCell(diamond);
@@ -271,7 +263,7 @@ paper.on('cell:pointerdblclick', function(cellView, evt, x, y) {
 
 			uID = cellView.model.id;
 			div_show();
-		}else if(type=='basic.Path'){ 			//if the shape is a Diamond
+		}else if(type=='basic.Diamond'){ 			//if the shape is a Diamond
 			document.getElementById("comments2").value = com;
 			$("input[name=radioDiaColor][value="+ color +"]").prop('checked', true);	//check radio button of element's color
 			uID = cellView.model.id;
@@ -446,6 +438,9 @@ if(numChecked > 3){
 	return;
 }
 
+//Get rid of that new line character at the end.
+textInBox = textInBox.substring(0, textInBox.length-1);
+
 elm.attr({text: {text: textInBox}});
 
 var com = document.getElementById('comments2').value;
@@ -458,19 +453,18 @@ elm.prop('comment',com);
  
 elm.prop('size/width', 120);
 elm.prop('size/height', 120);		//now that the save button was clicked, 'display' the element
+
 $('#diaModal').modal('hide');
 }
 
 //Function to serialize graph
 function serialize_graph(){
 jsonString = JSON.stringify(graph.toJSON());
-console.log(jsonString);
 }
 
 //Function to deserialize graph
 function deserialize_graph(){
 graph.fromJSON(JSON.parse(jsonString));
-//console.log(JSON.parse(jsonString));
 }
 
 function remove_shape(){
@@ -598,6 +592,12 @@ function make_graph()
 		$('#dec').val("").focus();
 	}
 	graph.fromJSON(JSON.parse(decrypted.toString(CryptoJS.enc.Utf8)));
+
+	var w = $('#paper').width();
+	var h = $('#paper').height();
+	//draw the relapse line in center of the paper
+	r_line = V('line',{x1: 0, y1: h/2, x2: w, y2: h/2, stroke: 'black'});
+	V(paper.viewport).append(r_line);
 }
 function download()
 {

@@ -5,8 +5,9 @@
 <%= stylesheet_link_tag "joint" %>
 <%= stylesheet_link_tag "fmaps", media: "all" %>
 
-<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
-<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
+<%= javascript_include_tag "aes" %>
+<%= javascript_include_tag "enc-base64-min" %>
+
 
 <!-- Modal for square and oval -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

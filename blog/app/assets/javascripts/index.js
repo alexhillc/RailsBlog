@@ -585,13 +585,13 @@ function make_graph()
 	// if password is wrong this will fail so let the user know about it
 	try {
 		var decrypted = CryptoJS.AES.decrypt(gon.id.json, document.getElementById("dec").value);
+		graph.fromJSON(JSON.parse(decrypted.toString(CryptoJS.enc.Utf8)));
 		$('#decModal').modal('hide');
 	} catch(err) {
 		$('#decModalLabel').html("Incorrect password, try again.").fadeIn(500).fadeOut(500).fadeIn(500)
 			.fadeOut(500).fadeIn(500);
 		$('#dec').val("").focus();
 	}
-	graph.fromJSON(JSON.parse(decrypted.toString(CryptoJS.enc.Utf8)));
 
 	var w = $('#paper').width();
 	var h = $('#paper').height();

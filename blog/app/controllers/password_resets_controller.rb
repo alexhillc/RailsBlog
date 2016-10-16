@@ -20,10 +20,10 @@ class PasswordResetsController < ApplicationController
 			if @user.save!
 				flash[:notice] = "You have successfully changed your password!"
 			else
-				flash[:notice] = "Couldn' update password"
+				flash[:alert] = "Couldn't update password"
 			end
 		else
-			flash[:notice] = "Your passwords did not match"
+			flash[:alert] = "Your passwords did not match"
 		end
 		current_user = @user
 		redirect_to "/"

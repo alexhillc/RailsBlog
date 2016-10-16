@@ -66,11 +66,13 @@
 		</div>
 	</div>	
   
-	<div class="row">
-		<div class="col-lg-12">
-		<br><br>
-			<p class="pull-left"><%= link_to 'Log Out', {:controller => 'sessions', :action => 'destroy'} %></p>
+        <% if current_user != nil %>
+            <div class="row">
+                <div class="col-lg-12">
+		    <br><br>
+                    <p class="pull-left"><%= link_to 'Log Out', {:controller => 'sessions', :action => 'destroy'} %></p>
 		</div>
-	</div>
+            </div>
+        <% end %>
 	
 </div>

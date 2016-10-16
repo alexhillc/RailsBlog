@@ -26,10 +26,10 @@ class AccountmanagementController < ApplicationController
 					flash[:notice] = "You have successfully changed your password!"
 				end
 			else
-				flash[:notice] = "Passwords did not match!"
+				flash[:alert] = "Passwords did not match!"
 			end
 		else
-			flash[:notice] = "Incorrect current password!"
+			flash[:alert] = "Incorrect current password!"
 		end
 		redirect_to :back
 	end
@@ -40,7 +40,7 @@ class AccountmanagementController < ApplicationController
 			render :action => :createaccount
 			flash[:notice] = "Account created!"
 		else
-			flash[:notice] = "There was an error creating the account."
+			flash[:alert] = "There was an error creating the account."
 			render :action => :createaccount
 		end
 	end

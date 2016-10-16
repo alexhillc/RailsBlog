@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
 		#if an instance is returned and @user is not nil...
 		if @user
 			#let the user know they've been logged in with a flash message
-			flash.alert = "You are logged in"
+			flash[:notice] = "You are logged in"
 			#THIS IS THE MOST IMPORTANT PART. Actually log the user in by storing their ID in the session hash with the [:user_id] key!
 			session[:user_id] = @user.id
 			#then redirect them to the homepage

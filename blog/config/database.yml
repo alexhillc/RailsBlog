@@ -1,18 +1,18 @@
 development:
   adapter: mysql2
   database: library_development
-  username: root
-  password: Changem3
+  username: familymap
+  password: familymap
   host: localhost
 test:
   adapter: mysql2
   database: library_test
-  username: root
-  password: Changem3
+  username: familymap
+  password: familymap
   host: localhost
 production:
   adapter: mysql2
   database: library_production
-  username: root
-  password: Changem3
+  username: familymap
+  password: familymap
   host: localhost

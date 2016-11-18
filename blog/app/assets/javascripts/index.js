@@ -30,6 +30,8 @@ $( document ).ready(function() {
 	//draw the relapse line in center of the paper
 	r_line = V('line',{x1: 0, y1: h/2, x2: w, y2: h/2, stroke: 'black'});
 	V(paper.viewport).append(r_line);
+
+        $('#edit').prop('disabled', true);
 });
 
 /********************************************************************************************************************************
@@ -39,59 +41,52 @@ When two are selected, it will popup the arrow dialog box for editing the link b
 *********************************************************************************************************************************/
 var linking = false;
 var linkSource, linkTarget;
-var linkSourceText, linkTargetText;
-var firstLink = true;
 function clickToLink(){
 
   if(!linking){
-  	if(firstLink){
-  	  alert("Click on two different elements to create an arrow, or you can cancel by clicking the Cancel button to the right.");
-  	  firstLink = false;
-  	}
 	  linking = true;			//global variable to allow pointerclick event(below) to run
 	  linkSource = -1;			//holds the ID of the source element
 	  linkTarget = -1;			//holds the ID of the target element
-	  linkTargetText = "";
-	  linkSourceText = "";
-	  
+
 	  $('.navbar-btn').prop('disabled', true);		//disabled all buttons on nav bar while linking is enabled 
 	  $('#arrowOptionsButton').prop('disabled', false);	//except for the Add Arrow button
   	  $('#arrowOptionsButton').html('Cancel');		//change arrow button to Cancel, to cancel linking
+          $('#arrowOptionsButton').tooltip('show');
 	  $('.element').css('cursor','pointer');		//so the user knows its clickable
+          setCurrentSelectedCell(-1)
   	}else{				//handles cancel button
   	  linking = false;
 
   	  if(linkSource != -1){
   	  	paper.findViewByModel(linkSource).unhighlight(linkSource);
-		graph.getCell(linkSource).attr({text: {text: linkSourceText}});
   	  }
   	  if(linkTarget != -1){
   	  	paper.findViewByModel(linkTarget).unhighlight(linkTarget);
-		graph.getCell(linkTarget).attr({text: {text: linkTargetText}});
   	  }
   	  $('#arrowOptionsButton').html('Add Arrow');
+          $('#arrowOptionsButton').tooltip('hide');
   	  $('.navbar-btn').prop('disabled', false);
 	  $('.element').css('cursor','move');
+          setCurrentSelectedCell(-1)
 	} 	
 }
-
 /********************************************************************************************************************************
 When linking is true, allow the user to click on an element for linking. Linking is turned on when 'Add Arrow' button
 is pressed.
 *********************************************************************************************************************************/
+var currentSelectedCell = -1
 paper.on('cell:pointerdown', function(cellView, evt, x, y){
-	  if(linking){
 
-		      var cell = cellView.model.id;
+          var cell = cellView.model.id;
+
+	  if(linking){
 
 		      if(cell == linkSource){				//if the user clicks on a cell that was already highlighted
 		      		paper.findViewByModel(linkSource).unhighlight(linkSource); //unhighlight and
-		      		graph.getCell(linkSource).attr({text: {text: linkSourceText}});
 		      		linkSource = -1;					//default back to -1
 		      }else 
 		      if(cell == linkTarget){				//same as above for linkTarget
 		      		paper.findViewByModel(linkTarget).unhighlight(linkTarget); 
-		      		graph.getCell(linkTarget).attr({text: {text: linkTargetText}});
 		      		linkTarget = -1;
 		      }else 
 		      if(linkSource == -1 && linkTarget != cell){	//make sure source is -1 and that the target is not the same as the source
@@ -99,8 +94,6 @@ paper.on('cell:pointerdown', function(cellView, evt, x, y){
 		          if(!(graph.getCell(cell).isLink())){		//make sure its not a link
 		      	    linkSource = cell;				
 		      	    paper.findViewByModel(cell).highlight(cell);//highlight for looks
-		      	    linkSourceText = graph.getCell(linkSource).attr('text/text') || ""; 
-		      	    graph.getCell(linkSource).attr({text: {text: '1'}});
 		      	}
 		      	  
 		      }else 
@@ -109,8 +102,6 @@ paper.on('cell:pointerdown', function(cellView, evt, x, y){
 		         if(!(graph.getCell(cell).isLink())){		
 		      	   linkTarget = cell;
 		      	   paper.findViewByModel(cell).highlight(cell);
-		      	   linkTargetText = graph.getCell(linkTarget).attr('text/text') || "";
-		      	   graph.getCell(linkTarget).attr({text: {text: '2'}});
 		      	}
 		      
 		      }//end if-else nest
@@ -118,8 +109,43 @@ paper.on('cell:pointerdown', function(cellView, evt, x, y){
 		      if(linkTarget != -1 && linkSource != -1){
 	      	        $('#arrowModal').modal('show');
 		      }
-		}//end if(linking)
+          } else { //end if(linking)
+
+            if (cell != currentSelectedCell && !graph.getCell(cell).isLink()) {
+                setCurrentSelectedCell(cell)
+            }     
+          }
 });//end pointer click
+
+/********************************************************************************************************************************
+Deselect the currently selected cell if the user clicks on a blank portion of the paper.
+*********************************************************************************************************************************/
+paper.on('blank:pointerclick', function(view, evt, x, y) {
+    setCurrentSelectedCell(-1)
+});
+
+function setCurrentSelectedCell(cell) {
+  var cellView = paper.findViewByModel(currentSelectedCell)
+
+  if (cellView != null) {
+      cellView.unhighlight(currentSelectedCell)
+  }
+
+  if (cell != -1) {
+      paper.findViewByModel(cell).highlight(cell); // highlight
+  }
+  $('#edit').prop('disabled', (cell == -1));
+  currentSelectedCell = cell
+}
+
+/********************************************************************************************************************************
+Deselect the currently selected cell if the cell is removed from the paper.
+*********************************************************************************************************************************/
+graph.on('remove', function(cell) {
+    if (currentSelectedCell == cell.id) {
+       setCurrentSelectedCell(-1)
+    }
+});
 
 /********************************************************************************************************************************
 Add a link to the graph:
@@ -138,9 +164,9 @@ function add_link(col, heads, dashed){
     });
     
     switch(heads){
-      case(1): {l.attr( {'.marker-target': {fill: '#333333', d: 'M 10 0 L 0 5 L 10 10'}} ); break;}	//add arrowhead to the target-side of the link
-      case(2): {l.attr( {'.marker-target': {fill: '#333333', d: 'M 10 0 L 0 5 L 10 10'}, 		//add arrowhead to both sides of the link
-                         '.marker-source': {fill: '#333333', d: 'M 10 0 L 0 5 L 10 10 z'}} ); break;}
+      case(1): {l.attr( {'.marker-target': {fill: col, d: 'M 10 0 L 0 5 L 10 10'}} ); break;}	//add arrowhead to the target-side of the link
+      case(2): {l.attr( {'.marker-target': {fill: col, d: 'M 10 0 L 0 5 L 10 10'}, 		//add arrowhead to both sides of the link
+                         '.marker-source': {fill: col, d: 'M 10 0 L 0 5 L 10 10 z'}} ); break;}
     }
     
     if(dashed){
@@ -166,14 +192,13 @@ Cancel linking process.  Unhighlight all elements, change values back to default
 *********************************************************************************************************************************/
 function cancel_linking(){
 	paper.findViewByModel(linkSource).unhighlight(linkSource);
-	graph.getCell(linkSource).attr({text: {text: linkSourceText}});
 	paper.findViewByModel(linkTarget).unhighlight(linkTarget);
-	graph.getCell(linkTarget).attr({text: {text: linkTargetText}});
 	$('.basic').css('cursor','move');
 	$('#arrowOptionsButton').html('Add Arrow');
+        $('#arrowOptionsButton').tooltip('hide');
 	$('.navbar-btn').prop('disabled', false);
 	linking=false;							//prevents the pointerclick for linking from running
-}
+ }
 
 /********************************************************************************************************************************
 Add an Oval shape(action) to the graph.  Ovals contain text, color and text style.  
@@ -190,6 +215,9 @@ function add_oval(){
                 position: { x:0, y:0 },
 		size: { width: 0, height: 0 }			//size to 0,0 so it will not show while setting it up						
         });
+
+        $("#modalTitle").text('Add Shape');
+        document.getElementById("deleteButton").style.display = "none";
 	
 	uID = oval.id;				
 	graph.addCell(oval);
@@ -216,6 +244,10 @@ function add_diamond(){
 
 	var diamond = new joint.shapes.basic.Diamond({
     		position: {x: 10, y: 10}});
+        
+        console.log($("#modalTitleDia"))
+        $("#modalTitleDia").text('Add Shape');
+        document.getElementById("deleteButtonDia").style.display = "none";
 
 	uID = diamond.id;
 	graph.addCell(diamond);
@@ -235,6 +267,9 @@ function add_square(){
                 position: { x:0, y:0 },				//Set position where shape will be spawned
 		size:     { width: 0, height: 0 }		//Set size of shape
         });
+ 
+        $("#modalTitle").text('Add Shape');
+        document.getElementById("deleteButton").style.display = "none";
         
 	uID = rect.id;				//store ID value of the element just created. uID is used to determine which shape the dialog box is editing/changing
 	graph.addCell(rect);		//add shape to the graphto be displayed
@@ -245,44 +280,55 @@ Handles the doubleclick of an element.  It will grab the data from this element 
 to be edited and saved.
 *********************************************************************************************************************************/
 paper.on('cell:pointerdblclick', function(cellView, evt, x, y) { 
-	if(!linking){
-		var elm = graph.getCell(cellView.model.id);			//get element that was clicked on
-		if(!elm.isLink()){
-		var txt = elm.attr('text/text');				//grab contect from element
-		var com = elm.prop('comment');					//grab comment from element
-		var color = elm.attr('rect/fill') || elm.attr('ellipse/fill') || elm.attr('path/fill');	//get color value back from element
+    showEditModal();
+});
 
-		var type = elm.prop('type');		
-		if (type=='basic.Rect' || type=='basic.Ellipse'){	//if the shape  is a square or oval
-		
-			$("input[name=optradio][value="+ color +"]").prop('checked', true);	//check radio button of element's color
-			txt = txt.replace(/\n/g, " ");	//we just want the text to show on the field, not the tags
-			$("input[name=optradio3][value="+ getStyle(elm) +"]").prop('checked', true);	//check the font-style of element
-			document.getElementById("name").value = txt;
-			document.getElementById("comments").value = com;
+function showEditModal() {
+  if (linking || currentSelectedCell == -1) {
+     return;
+  }
 
-			uID = cellView.model.id;
-			div_show();
-		}else if(type=='basic.Diamond'){ 			//if the shape is a Diamond
-			document.getElementById("comments2").value = com;
-			$("input[name=radioDiaColor][value="+ color +"]").prop('checked', true);	//check radio button of element's color
-			uID = cellView.model.id;
-			
-			document.getElementById("sad").checked = elm.prop('sad');
-			document.getElementById("angry").checked = elm.prop('angry');
-			document.getElementById("worried").checked = elm.prop('worried');
-			document.getElementById("happy").checked =elm.prop('happy');
-			document.getElementById("aroused").checked = elm.prop('aroused');
-			document.getElementById("discomfort").checked = elm.prop('discomfort');
-			document.getElementById("lonely").checked = elm.prop('lonely');
-			document.getElementById("guilty").checked = elm.prop('guilty');
-			document.getElementById("ashamed").checked = elm.prop('ashamed');
-			$('#diaModal').modal('show');
-		}
-	  }
-    }
-    }
-);
+  var elm = graph.getCell(currentSelectedCell);                     //get element that was clicked on
+  if(!elm.isLink()){
+	var txt = elm.attr('text/text');                                //grab contect from element
+	var com = elm.prop('comment');                                  //grab comment from element
+	var color = elm.attr('rect/fill') || elm.attr('ellipse/fill') || elm.attr('path/fill'); //get color value back from element
+
+	var type = elm.prop('type');
+	if (type=='basic.Rect' || type=='basic.Ellipse'){       //if the shape  is a square or oval
+
+                $("#modalTitle").text('Edit Shape');
+                document.getElementById("deleteButton").style.display = "inline";
+
+		$("input[name=optradio][value="+ color +"]").prop('checked', true);     //check radio button of element's color
+		txt = txt.replace(/\n/g, " ");  //we just want the text to show on the field, not the tags
+		$("input[name=optradio3][value="+ getStyle(elm) +"]").prop('checked', true);    //check the font-style of element
+		document.getElementById("name").value = txt;
+		document.getElementById("comments").value = com;
+
+		uID = currentSelectedCell;
+		div_show();
+	}else if(type=='basic.Diamond'){                        //if the shape is a Diamond
+		document.getElementById("comments2").value = com;
+		$("input[name=radioDiaColor][value="+ color +"]").prop('checked', true);        //check radio button of element's color
+		uID = currentSelectedCell;
+
+                $("#modalTitleDia").text('Edit Shape');
+                document.getElementById("deleteButtonDia").style.display = "inline";
+
+		document.getElementById("sad").checked = elm.prop('sad');
+		document.getElementById("angry").checked = elm.prop('angry');
+		document.getElementById("worried").checked = elm.prop('worried');
+		document.getElementById("happy").checked =elm.prop('happy');
+		document.getElementById("aroused").checked = elm.prop('aroused');
+		document.getElementById("discomfort").checked = elm.prop('discomfort');
+		document.getElementById("lonely").checked = elm.prop('lonely');
+		document.getElementById("guilty").checked = elm.prop('guilty');
+		document.getElementById("ashamed").checked = elm.prop('ashamed');
+		$('#diaModal').modal('show');
+	}
+  }
+}
 
 function getStyle(elm){
 	if(elm.attr('text/font-style') == 'italic'){

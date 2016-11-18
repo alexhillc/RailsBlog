@@ -15,7 +15,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Edit Shape</h4>
+        <h4 class="modal-title" id="modalTitle">Edit Shape</h4>
       </div>
       <div class="modal-body">
 		<div class="form-group">
@@ -72,10 +72,10 @@
       </div>
       <div class="modal-footer">
 		<div style="float:left;color:#737373;line-height: 34px;">
-			<button type="button" class="btn btn-danger" onclick="remove_shape()">Delete</button>
+			<button type="button" id="deleteButton" class="btn btn-danger" onclick="remove_shape()">Delete</button>
 		</div>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onClick="div_hide()">Save changes</button>
+        <button type="button" class="btn btn-primary" onClick="div_hide()">Save</button>
       </div>
     </div>
   </div>
@@ -87,20 +87,20 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Edit Shape</h4>
+        <h4 class="modal-title" id="modalTitleDia">Edit Shape</h4>
       </div>
       <div class="modal-body">
 		<div class="form-group">
 			<label for="name">Feelings:</label><br>
-			<input type="checkbox" id="angry">Angry
-			<input type="checkbox" id="sad">Sad
-			<input type="checkbox" id="happy">Happy<br>
-			<input type="checkbox" id="aroused">Aroused
-			<input type="checkbox" id="worried">Worried
-			<input type="checkbox" id="lonely">Lonely<br>
-			<input type="checkbox" id="ashamed">Ashamed
-			<input type="checkbox" id="guilty">Guilty
-			<input type="checkbox" id="discomfort">Physical Discomfort
+			<input type="checkbox" id="angry"> Angry
+			<input type="checkbox" id="sad"> Sad
+			<input type="checkbox" id="happy"> Happy<br>
+			<input type="checkbox" id="aroused"> Aroused
+			<input type="checkbox" id="worried"> Worried
+			<input type="checkbox" id="lonely"> Lonely<br>
+			<input type="checkbox" id="ashamed"> Ashamed
+			<input type="checkbox" id="guilty"> Guilty
+			<input type="checkbox" id="discomfort"> Physical Discomfort
 		</div>
 
 		<div class="form-group">
@@ -138,10 +138,10 @@
       </div>
       <div class="modal-footer">
 		<div style="float:left;color:#737373;line-height: 34px;">
-			<button type="button" class="btn btn-danger" onclick="remove_dia()">Delete</button>
+			<button type="button" id="deleteButtonDia" class="btn btn-danger" onclick="remove_dia()">Delete</button>
 		</div>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onClick="div_hide_dia()">Save changes</button>
+        <button type="button" class="btn btn-primary" onClick="div_hide_dia()">Save</button>
       </div>
     </div>
   </div>
@@ -352,7 +352,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onClick="div_arrow_hide()">Save changes</button>
+        <button type="button" class="btn btn-primary" onClick="div_arrow_hide()">Save</button>
       </div>
     </div>
   </div>
@@ -509,9 +509,10 @@
 				<button type="button" class="btn btn-default navbar-btn" onclick="add_oval()">Oval - Action</button>
 				<button type="button" class="btn btn-default navbar-btn" onclick="add_diamond()">Diamond - Feeling</button>
 				<button type="button" class="btn btn-default navbar-btn" onclick="add_square()">Square - Thought</button>
-				<span id="arrow_note" style="color: red; display: none; font-size: 18px;">Click on two different elements to create an Arrow, or you can cancel by clicking the Cancel button to the right.</span>
+                                <button type="button" class="btn btn-default navbar-btn" id="arrowOptionsButton" data-toggle="tooltip" data-placement="right" data-trigger="manual" 
+                                        title="Click on two different elements to create an arrow." onclick="clickToLink()">Add Arrow</button>
 				<div class="navbar-right">
-				<button type="button" class="btn btn-default navbar-btn" id="arrowOptionsButton" onclick="clickToLink()">Add Arrow</button>
+                                <button type="button" class="btn btn-default navbar-btn" id="edit" onclick="showEditModal()">Edit</button>
 				<button type="button" class="btn btn-default navbar-btn" id="undo"><span class="glyphicon glyphicon-arrow-left"></span> Undo</button>
 				<button type="button" class="btn btn-default navbar-btn" id="redo">Redo <span class="glyphicon glyphicon-arrow-right"></span></button>
 				</div>

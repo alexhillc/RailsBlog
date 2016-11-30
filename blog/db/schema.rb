@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160307143759) do
+ActiveRecord::Schema.define(version: 20161126062835) do
 
   create_table "articles", force: true do |t|
     t.string   "title"
@@ -21,17 +21,27 @@ ActiveRecord::Schema.define(version: 20160307143759) do
     t.string   "user_name"
   end
 
+  create_table "families", force: true do |t|
+    t.integer  "user_id"
+    t.string   "encrypted_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "families", ["user_id"], name: "index_families_on_user_id", using: :btree
+
   create_table "fmaps", force: true do |t|
     t.string   "title"
-    t.text     "json",       limit: 2147483647
-    t.string   "username"
-    t.string   "family"
+    t.text     "json",        limit: 2147483647
     t.text     "notes"
     t.string   "extra"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "version"
+    t.integer  "scenario_id"
   end
+
+  add_index "fmaps", ["scenario_id"], name: "index_fmaps_on_scenario_id", using: :btree
 
   create_table "mapdemos", force: true do |t|
     t.text     "json"
@@ -45,6 +55,16 @@ ActiveRecord::Schema.define(version: 20160307143759) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "scenarios", force: true do |t|
+    t.integer  "family_id"
+    t.string   "title"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "scenarios", ["family_id"], name: "index_scenarios_on_family_id", using: :btree
 
   create_table "tasks", force: true do |t|
     t.string   "description"

@@ -1,0 +1,5 @@
+$('#fmaps_scenarios_select').html("<%= escape_javascript(options_from_collection_for_select(@scenarios, :id, :title)) %>");
+$('#fmaps_save_scenarios_select').html("<%= escape_javascript(options_from_collection_for_select(@scenarios, :id, :title)) %>");
+$('#scenarios_table').html('<%= escape_javascript(render :partial => "scenarios_table") %>');
+$('#scenarios_table').DataTable().destroy();
+$('#scenarios_table').DataTable()

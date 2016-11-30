@@ -3,44 +3,28 @@
 <script src="https://cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
 <!DOCTYPE HTML>
 <div class="container">
-  <h1>Load an existing Family Interaction Map</h1>
-  <%= link_to 'Create a new Family Interaction Map', new_fmap_path %><br><br>
-  <table id="load-familymaps-table" class="table table-hover">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Family</th>
-        <th>Version</th>
-        <th>Clinician</th>
-        <th>Notes</th>
-        <th>Username</th>
-        <th>Created At</th>
-        <th>Updated At</th>
-        <th>Load</th>
-        <th>Delete</th>
-        <th colspan="10"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @fmaps.each do |fmap| %>
-        <% if fmap.username == current_user.email %>
-          <tr>
-	    <td><%= fmap.title %></td>
-	    <td><%= fmap.family %></td>
-            <td><%= fmap.version %></td>
-            <td><%= fmap.extra %></td>
-            <td><%= fmap.notes %></td>
-            <td><%= fmap.username %></td>
-            <td><%= fmap.created_at %></td>
-            <td><%= fmap.updated_at %></td>
-            <td><%= link_to 'Load', fmap_path(fmap) %></td>
-            <td><%= link_to 'Delete', fmap_path(fmap),
-                    method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          </tr>
-        <% end %>
-      <% end %>
-    </tbody>
-  </table>
+  <div class="row">
+    <h1>Load an existing Family Interaction Map</h1>
+  </div>
+  <div class="row">
+    <%= link_to 'Create a new Family Interaction Map', new_fmap_path %><br><br>
+  </div>
+  <div class="row">
+    <div class="col-sm-4 col-sm-offset-4">
+      <%= label_tag :family  %>
+      <%= select_tag(:family_id, options_from_collection_for_select(@families, :id, :encrypted_name), { class: 'form-control', :id => 'fmaps_families_select' })  %>
+      <%= label_tag :scenario %>
+      <%= select_tag(:scenario_id, options_from_collection_for_select(@scenarios, :id, :title), { class: 'form-control', :id => 'fmaps_scenarios_select' })  %>
+    </div>
+  </div>
+  <div class="row">
+    <p>Current user: <%= current_user.email %></p>
+  </div>
+  <div class="row">
+    <table id="load-familymaps-table" class="table table-hover">
+      <%= render :partial => "family_map_table" %>
+    </table>
+  </div>
 </div>
 
 <script>
@@ -48,3 +32,6 @@ $(document).ready(function() {
     $('#load-familymaps-table').DataTable();
 } );
 </script>
+
+<%= javascript_include_tag "scenarios" %>
+<%= javascript_include_tag "fmaps" %>

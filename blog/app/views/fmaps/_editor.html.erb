@@ -168,11 +168,14 @@
 			</ul>
 			</div>
 			<% end %>
+                                <%= f.input        :username, input_html: { value: current_user.email, class: 'form-control' }, readonly: true  %>
 				<%= f.input        :title,  input_html: { class: 'form-control' }     %>
 				<%= f.hidden_field :json %>
+                                <%= label_tag :family %>
+                                <%= select_tag(:family_id, options_from_collection_for_select(@families, :id, :encrypted_name), { class: 'form-control', :id => 'fmaps_save_families_select' })  %>
+                                <%= f.label :scenario %>
+                                <%= f.collection_select :scenario_id, @scenarios, :id, :title, {}, { class: 'form-control', :id => 'fmaps_save_scenarios_select' }  %>
 				<%= f.input        :version,  input_html: { class: 'form-control' }     %>
-				<%= f.input        :username, input_html: { value: current_user.email, class: 'form-control' }, readonly: true  %>
-				<%= f.input        :family,  input_html: { class: 'form-control' }      %>
 				<%= f.input        :extra, label: 'Clinician',  input_html: { class: 'form-control' }       %>
 				<%= f.input        :notes,  input_html: { class: 'form-control' }       %>
 				<div class="modal-footer">
@@ -211,7 +214,6 @@
 				<%= f.input        :json,  input_html: { class: 'form-control', id: 'new_json' }, readonly: true  %>
 				<%= f.input        :version,  input_html: { class: 'form-control', id: 'new_version' }     %>
 				<%= f.input        :username, input_html: { value: current_user.email, class: 'form-control', id: 'new_username' }, readonly: true  %>
-				<%= f.input        :family,  input_html: { class: 'form-control', id: 'new_family' }      %>
 				<%= f.input        :extra, label: 'Clinician',  input_html: { class: 'form-control', id: 'new_extra' }       %>
 				<%= f.input        :notes,  input_html: { class: 'form-control', id: 'new_notes' }       %>
 				<div class="modal-footer">
@@ -497,7 +499,7 @@
 				  <!-- <li><a href="#" onclick="save_to_database_new_prep()">Save As...</a></li> -->
 				  <!-- Save as commented out - still bugged in that after doing save as you're still editing the original document-->
 				  <li><%= link_to 'Load', {:controller => 'fmaps'}, data: { confirm: 'Are you sure? All unsaved changes will be lost.' } %></li>
-				  <li><%= link_to 'Exit', {:controller => 'welcome', :action => 'index'}, data: { confirm: 'Are you sure? All unsaved changes will be lost.'} %></li>
+				  <li><%= link_to 'Exit', {:controller => 'fmaps', :action => 'options'}, data: { confirm: 'Are you sure? All unsaved changes will be lost.'} %></li>
                   <li class="divider"></li>
                   <li class="dropdown-header">Export</li>
                   <li><a href="#" onclick="window.print()"; >Print</a></li>
@@ -543,5 +545,6 @@
 <%= javascript_include_tag "joint.shapes.erd" %>
 
 <%= javascript_include_tag "index" %>
+<%= javascript_include_tag "scenarios" %>
 
 </html>

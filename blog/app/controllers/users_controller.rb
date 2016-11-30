@@ -2,6 +2,7 @@ class UsersController < ApplicationController
 
 	def create
 		@user = User.new(user_params)
+                @user.families << @family
 		if @user.save
 			#If user is already logged in
 			flash[:notice] = "Welcome to the site!"

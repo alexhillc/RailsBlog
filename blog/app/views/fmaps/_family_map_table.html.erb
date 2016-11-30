@@ -1,0 +1,31 @@
+<thead>
+    <tr>
+        <th>Title</th>
+        <th>Version</th>
+        <th>Clinician</th>
+        <th>Notes</th>
+        <th>Created At</th>
+        <th>Updated At</th>
+        <th>Load</th>
+        <th>Delete</th>
+        <th colspan="10"></th>
+    </tr>
+</thead>
+<tbody id="family-map-data">
+    <% if @fmaps %>
+        <% @fmaps.each do |fmap| %>
+	  <tr>
+	    <td><%= fmap.title %></td>
+	    <td><%= fmap.version %></td>
+	    <td><%= fmap.extra %></td>
+	    <td><%= fmap.notes %></td>
+	    <td><%= fmap.created_at %></td>
+	    <td><%= fmap.updated_at %></td>
+	    <td><%= link_to 'Load', fmap_path(fmap) %></td>
+	    <td><%= link_to 'Delete', fmap_path(fmap),
+		    method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	   </tr>
+      <% end %>
+    <% end %>
+</tbody>
+

@@ -1,0 +1,15 @@
+<%= stylesheet_link_tag "bootstrap" %>
+<%= stylesheet_link_tag "signin" %>
+
+<%= form_for Family.new, :html => {:class => "form-signin"} do |f| %>
+        <%= link_to "Back", fmaps_path %>
+        <h2 class="form-signin-heading">New Family</h2>
+        <%= f.hidden_field :user_id, :value => current_user.id %>
+        <%= f.label :user %>
+        <%= f.text_field :username, :value => current_user.email, :readonly => true, :class => 'form-control' %>
+        <%= f.label :name %>
+        <%= f.text_field :encrypted_name, :class => 'form-control' %>
+        </br>
+        </br>
+        <%= f.submit "Create Family", :class => 'btn btn-primary' %>
+<% end %>

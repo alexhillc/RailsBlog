@@ -10,6 +10,11 @@ Rails.application.routes.draw do
 
   get 'password_resets/new'
 
+  get 'scenarios/valid_scenarios', :as => 'valid_scenarios'
+  get 'fmaps/valid_fmaps', :as => 'valid_fmaps'
+
+  get 'fmaps/options'
+
   #get 'welcome/index'
 	resources :articles
 	resources :users
@@ -18,6 +23,8 @@ Rails.application.routes.draw do
 	resources :tasks
 	resources :fmaps
 	resources :password_resets
+        resources :families
+        resources :scenarios
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -25,11 +32,11 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
    
-	get "/log-in" => "sessions#new"
-	post "/log-in" => "sessions#create"
-	get "/log-out" => "sessions#destroy", as: :log_out
+  get "/log-in" => "sessions#new"
+  post "/log-in" => "sessions#create"
+  get "/log-out" => "sessions#destroy", as: :log_out
 	
-	get '/about' => 'fmaps#about'
+  get '/about' => 'fmaps#about'
 
   get 'accountmanagement/' => 'accountmanagement#index'
   get 'accountmanagement/updatepassword'

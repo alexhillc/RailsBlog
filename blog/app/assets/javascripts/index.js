@@ -533,14 +533,14 @@ function save_to_database_new_prep()
 function save_proceed(){
 	var password = document.getElementById("pw").value;
 	var password2 = document.getElementById("pwCon").value;
-	if(password.length<5 || password!=password2)
+	if(password.length<8 || password!=password2)
 	{
-		alert("Map Password error. Map Password must be at least five characters in length and match confirmation.");
+		alert("Map Password error. Map Password must be at least eight characters in length and match confirmation.");
 		return;
 	}
 	document.getElementById("fmap_json").value = CryptoJS.AES.encrypt(JSON.stringify(graph.toJSON()),document.getElementById("pw").value);
 	$('#passModal').modal('hide');
-	$('#saveModal').modal('show');
+        $('#saveModal').modal('show');
 }
 function save_proceed_new()
 {
@@ -548,7 +548,7 @@ function save_proceed_new()
 	var password2 = document.getElementById("pwConNew").value;
 	if(password.length<5 || password!=password2)
 	{
-		alert("Map Password error. Map Password must be at least five characters in length and match confirmation.");
+		alert("Map Password error. Map Password must be at least eight characters in length and match confirmation.");
 		return;
 	}
 	

@@ -28,14 +28,14 @@
 	<div class="row">
 		<div class="col-md-3">
 		  <div class="panel panel-default">
-			<div class="panel-heading"><h3><%= link_to 'Load Family Map', controller: 'fmaps' %></h3></div>
+			<div class="panel-heading"><h3><%= link_to 'Load Family Map', {:controller => 'fmaps'} %></h3></div>
 			<div class="panel-body">Click here to go to previously saved family maps. Remember to log in first.
 			</div>
 		  </div>
 		</div>
 		<div class="col-md-3">
 		  <div class="panel panel-default">
-			<div class="panel-heading"><h3><%= link_to 'New Family Map', {:controller => 'fmaps', :action => 'new'} %></h3></div>
+			<div class="panel-heading"><h3><%= link_to 'New Family Map', {:controller => 'fmaps', :action => 'options'} %></h3></div>
 			<div class="panel-body">Click here to start work on a new family map. Remember to log in first.
 			</div>
 		  </div>

@@ -35,13 +35,15 @@ class AccountmanagementController < ApplicationController
 	end
 	
 	def create
+                family = Family.new(encrypted_name: "N/A")
 		newUser = User.new(user_params)
+                newUser.families << family
 		if newUser.save
-			render :action => :createaccount
 			flash[:notice] = "Account created!"
+                        render 'createaccount'
 		else
 			flash[:alert] = "There was an error creating the account."
-			render :action => :createaccount
+			render 'createaccount'
 		end
 	end
 

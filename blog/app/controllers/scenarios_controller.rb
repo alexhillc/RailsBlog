@@ -18,6 +18,11 @@ class ScenariosController < ApplicationController
   def edit
     if current_user
       @scenario = Scenario.find(params[:id])
+      @family = Family.find(@scenario.family_id)
+      if current_user.id != @family.user_id
+        redirect_to scenarios_path
+        flash[:alert] = "You are not permitted to edit this scenario."
+      end
     else
       redirect_to "/log-in"
     end
@@ -41,12 +46,18 @@ class ScenariosController < ApplicationController
   def update
     if current_user
       @scenario = Scenario.find(params[:id])
-      if @scenario.update(scenario_params)
-        redirect_to scenarios_path
-        flash[:notice] = "Successfully updated scenario."
+      @family = Family.find(@scenario.family_id)
+      if current_user.id == @family.user_id
+        if @scenario.update(scenario_params)
+          redirect_to scenarios_path
+          flash[:notice] = "Successfully updated scenario."
+        else
+          render 'edit'
+          flash[:alert] = "There was a problem updating this scenario."
+        end
       else
-        render 'edit'
-        flash[:alert] = "There was a problem updating this scenario."
+        redirect_to scenarios_path
+        flash[:alert] = "You are not permitted to update this scenario."
       end
     else
       redirect_to "/log-in"

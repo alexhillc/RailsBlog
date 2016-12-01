@@ -29,6 +29,7 @@ def show
 		if current_user.id == @families.first.user_id
 			gon.id = @fmap
 		else
+                        flash[:alert] = "You are not permitted to view this Family Map."
 			redirect_to "/fmaps"
 		end
 	else
@@ -78,15 +79,16 @@ end
 
 def destroy
 	if current_user
-                @scenario = Scenario.find(params[:scenario])
-                @family = Family.find(@scenario.family)
-                @user = User.find(@family.belongs_to_user)
-		if current_user.id == @user.id
-                  @fmap = Fmap.find(params[:id])
+                @fmap = Fmap.find(params[:id])
+                @scenario = Scenario.find(@fmap.scenario_id)
+                @family = Family.find(@scenario.family_id)
+		if current_user.id == @family.user_id
                   @fmap.destroy
                   redirect_to fmaps_path
+                  flash[:notice] = "Successfully deleted Family Map."
 		else
-                  redirect_to "index"
+                  redirect_to fmaps_path
+                  flash[:alert] = "You are not permitted to delete this Family Map."
 		end
 	else
 		redirect_to "/log-in"

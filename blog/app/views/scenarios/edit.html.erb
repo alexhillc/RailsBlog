@@ -5,11 +5,11 @@
         <%= link_to "Back", :back %>
         <h2 class="form-signin-heading">Edit Scenario</h2>
         <%= f.label :family %>
-        <%= f.collection_select :family_id, Family.where(:user_id => current_user.id), :id, :encrypted_name, { prompt: 'Select a family...', :selected => @scenario.family_id }, { class: 'form-control' }  %>
+        <%= f.collection_select :family_id, Family.where(:user_id => current_user.id), :id, :name, { :selected => @scenario.family_id }, { class: 'form-control' }  %>
         <%= f.label :title %>
         <%= f.text_field :title, :value => @scenario.title, :class => 'form-control' %>
         <%= f.label :description %>
-        <%= f.text_field :description, :value => @scenario.description, :class => 'form-control' %>
+        <%= f.text_area :description, :value => @scenario.description, :class => 'form-control' %>
         </br>
         </br>
         <%= f.submit "Update Scenario", :class => 'btn btn-primary' %>

@@ -34,6 +34,10 @@ class FamiliesController < ApplicationController
   def edit
     if current_user
       @family = Family.find(params[:id])
+      if current_user.id != @family.user_id
+        redirect_to families_path
+        flash[:alert] = "You are not permitted to edit this family."  
+      end
     else
       redirect_to "/log-in"
     end
@@ -42,12 +46,17 @@ class FamiliesController < ApplicationController
   def update
     if current_user
       @family = Family.find(params[:id])
-      if @family.update(family_params)
-        redirect_to families_path
-        flash[:notice] = "Successfully updated family."
+      if current_user.id == @family.user_id
+        if @family.update(family_params)
+          redirect_to families_path
+          flash[:notice] = "Successfully updated family."
+        else
+          render 'edit'
+          flash[:alert] = "There was a problem updating this family."
+        end
       else
-        render 'edit'
-        flash[:alert] = "There was a problem updating this family."
+        redirect_to families_path
+        flash[:alert] = "You are not permitted to update this family."
       end
     else
       redirect_to "/log-in"
@@ -72,7 +81,7 @@ class FamiliesController < ApplicationController
 
 private
   def family_params
-    params.require(:family).permit(:encrypted_name, :user_id)
+    params.require(:family).permit(:name, :user_id)
   end
 
 end

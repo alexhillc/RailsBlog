@@ -5,12 +5,18 @@ class SessionsController < ApplicationController
 		@user = User.authenticate(params[:email], params[:password])
 		#if an instance is returned and @user is not nil...
 		if @user
+                  if !@user.account_frozen
+                        @user.update_columns(last_sign_in_ip: request.ip, last_sign_in_at: Time.now)
 			#let the user know they've been logged in with a flash message
 			flash[:notice] = "You are logged in"
 			#THIS IS THE MOST IMPORTANT PART. Actually log the user in by storing their ID in the session hash with the [:user_id] key!
 			session[:user_id] = @user.id
 			#then redirect them to the homepage
 			redirect_to "/"
+                  else
+                    redirect_to "/"
+                    flash[:alert] = "Your account has been frozen. Contact a site administrator for further assistance."
+                  end
 		else
 			#whoops, either the user wasn't in the database or their password is incorrect, so let them know, then redirect them back to the log in page
 			flash[:alert] = "There was a problem logging you in."

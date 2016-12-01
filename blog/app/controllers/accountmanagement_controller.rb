@@ -2,17 +2,26 @@ class AccountmanagementController < ApplicationController
 
 	def index
 	end
+        
+        def accounts
+          if current_user.try(:admin?)
+            @users = User.all
+          else
+            flash[:notice] = "You are not an administrator!"
+            redirect_to accountmanagement_path
+          end
+        end
 
 	def createaccount
 		if !current_user.try(:admin?)
 			flash[:notice] = "You are not an administrator!"
-			redirect_to "/"
+			redirect_to accountmanagement_path
 		end
 	end
 
 	def updatepassword
 		if !current_user
-			redirect_to "/"
+			redirect_to "/log-in"
 		end
 	end
 
@@ -35,20 +44,52 @@ class AccountmanagementController < ApplicationController
 	end
 	
 	def create
-                family = Family.new(encrypted_name: "N/A")
+                family = Family.new(name: "N/A")
 		newUser = User.new(user_params)
                 newUser.families << family
 		if newUser.save
-			flash[:notice] = "Account created!"
+			flash[:notice] = "Account successfully created."
                         render 'createaccount'
 		else
 			flash[:alert] = "There was an error creating the account."
 			render 'createaccount'
 		end
 	end
+        
+        def freeze
+          if current_user.try(:admin?)
+            user = User.find(params[:id])
+            if user.update_attribute(:account_frozen, true)
+              redirect_to accountmanagement_accounts_path
+              flash[:notice] = "Account successfully frozen."
+            else
+              redirect_to accountmanagement_accounts_path
+              flash[:alert] = "There was an issue freezing the account."
+            end
+          else
+            redirect_to accountmangement_accounts_path
+            flash[:alert] = "You are not an administrator!"
+          end
+        end
+
+        def unfreeze
+          if current_user.try(:admin?)
+            user = User.find(params[:id])
+            if user.update_attribute(:account_frozen, false)
+              redirect_to accountmanagement_accounts_path
+              flash[:notice] = "Account successfully unfrozen."
+            else
+              redirect_to accountmanagement_accounts_path
+              flash[:alert] = "There was an issue unfreezing the account."
+            end
+          else
+            redirect_to accountmanagement_accounts_path
+            flash[:alert] = "You are not an administrator!"
+          end
+        end
 
 	def user_params
-		params.require(:user).permit(:email, :password, :password_confirmation)
+		params.require(:user).permit(:id, :account_frozen, :email, :password, :password_confirmation)
 	end
 
 end

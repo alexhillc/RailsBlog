@@ -12,7 +12,7 @@
     <% if @families %>
         <% @families.each do |family| %>
 	  <tr>
-	    <td><%= family.encrypted_name %></td>
+	    <td><%= family.name %></td>
 	    <td><%= family.created_at %></td>
 	    <td><%= family.updated_at %></td>
 	    <td><%= link_to 'Edit', edit_family_path(family) %></td>

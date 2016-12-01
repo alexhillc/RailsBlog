@@ -172,7 +172,7 @@
 				<%= f.input        :title,  input_html: { class: 'form-control' }     %>
 				<%= f.hidden_field :json %>
                                 <%= label_tag :family %>
-                                <%= select_tag(:family_id, options_from_collection_for_select(@families, :id, :encrypted_name), { class: 'form-control', :id => 'fmaps_save_families_select' })  %>
+                                <%= select_tag(:family_id, options_from_collection_for_select(@families, :id, :name), { class: 'form-control', :id => 'fmaps_save_families_select' })  %>
                                 <%= f.label :scenario %>
                                 <%= f.collection_select :scenario_id, @scenarios, :id, :title, {}, { class: 'form-control', :id => 'fmaps_save_scenarios_select' }  %>
 				<%= f.input        :version,  input_html: { class: 'form-control' }     %>

@@ -7,12 +7,15 @@
     <h1>Load an existing Family Interaction Map</h1>
   </div>
   <div class="row">
+    <%= link_to 'Back', :back %>
+  </div>
+  <div class="row">
     <%= link_to 'Create a new Family Interaction Map', new_fmap_path %><br><br>
   </div>
   <div class="row">
     <div class="col-sm-4 col-sm-offset-4">
       <%= label_tag :family  %>
-      <%= select_tag(:family_id, options_from_collection_for_select(@families, :id, :encrypted_name), { class: 'form-control', :id => 'fmaps_families_select' })  %>
+      <%= select_tag(:family_id, options_from_collection_for_select(@families, :id, :name), { class: 'form-control', :id => 'fmaps_families_select' })  %>
       <%= label_tag :scenario %>
       <%= select_tag(:scenario_id, options_from_collection_for_select(@scenarios, :id, :title), { class: 'form-control', :id => 'fmaps_scenarios_select' })  %>
     </div>

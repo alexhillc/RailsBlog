@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161126062835) do
+ActiveRecord::Schema.define(version: 20161201011931) do
 
   create_table "articles", force: true do |t|
     t.string   "title"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 20161126062835) do
 
   create_table "families", force: true do |t|
     t.integer  "user_id"
-    t.string   "encrypted_name"
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20161126062835) do
   create_table "scenarios", force: true do |t|
     t.integer  "family_id"
     t.string   "title"
-    t.string   "description"
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20161126062835) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.boolean  "admin",                  default: false
+    t.boolean  "account_frozen",         default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

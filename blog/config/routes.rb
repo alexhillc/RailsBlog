@@ -44,6 +44,13 @@ Rails.application.routes.draw do
   get 'accountmanagement/createaccount'
   post 'accountmanagement/createaccount' => 'accountmanagement#create'
   post 'password_resets/:id' => 'password_resets#update'
+  get 'accountmanagement/accounts'
+  post 'accountmanagement/accounts' => 'accountmanagement#accounts'
+  get 'accountmanagement/freezeaccount'
+  post 'accountmanagement/freezeaccount' => 'accountmanagement#freeze'
+  get 'accountmanagement/unfreezeaccount'
+  post 'accountmanagement/unfreezeaccount' => 'accountmanagement#unfreeze'
+  delete 'accountmanagement/deleteaccount' => 'accountmanagement#destroy'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

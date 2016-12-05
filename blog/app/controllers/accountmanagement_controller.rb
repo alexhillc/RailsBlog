@@ -44,10 +44,8 @@ class AccountmanagementController < ApplicationController
 	end
 	
 	def create
-                family = Family.new(name: "N/A")
 		newUser = User.new(user_params)
-                newUser.families << family
-		if newUser.save
+		if newUser.save!
 			flash[:notice] = "Account successfully created."
                         render 'createaccount'
 		else
@@ -89,7 +87,7 @@ class AccountmanagementController < ApplicationController
         end
 
 	def user_params
-		params.require(:user).permit(:id, :account_frozen, :email, :password, :password_confirmation)
+		params.require(:user).permit(:email, :password, :password_confirmation)
 	end
 
 end

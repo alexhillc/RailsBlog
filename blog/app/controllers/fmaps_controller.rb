@@ -24,14 +24,21 @@ def show
 	if current_user
 		@fmap = Fmap.find(params[:id])
 		@zmap = Fmap.new
-                @scenarios = Scenario.where(:id => @fmap.scenario_id)
-                @families = Family.where(:id => @scenarios.first.family_id)
-		if current_user.id == @families.first.user_id
-			gon.id = @fmap
-		else
+                @families = Family.where(:user_id => current_user.id)
+                if @families.first
+		  if current_user.id == @families.first.user_id
+                        @scenario = Scenario.find(@fmap.scenario_id)
+                        @family = Family.find(@scenario.family_id)
+                        @scenarios = Scenario.where(:family_id => @family.id)
+		        gon.id = @fmap
+		  else
+                        redirect_to "/fmaps"
                         flash[:alert] = "You are not permitted to view this Family Map."
-			redirect_to "/fmaps"
-		end
+		  end
+                else
+                  redirect_to new_family_path
+                  flash[:alert] = "You must create at least one family before creating a new Family Map."
+                end
 	else
 		redirect_to "/log-in"
 	end
@@ -45,7 +52,12 @@ def new
 		@fmap = Fmap.new
 		@zmap = Fmap.new
                 @families = Family.where(:user_id => current_user.id)
-                @scenarios = Scenario.where(:family_id => @families.first.id)
+                if @families.first
+                  @scenarios = Scenario.where(:family_id => @families.first.id)
+                else
+                  redirect_to new_family_path
+                  flash[:alert] = "You must create at least one family before creating a new Family Map."
+                end
 	else
 		redirect_to "/log-in"
 	end
@@ -55,9 +67,11 @@ def create
 	if current_user
 		@fmap = Fmap.new(fmap_params)
 		if @fmap.save
-			redirect_to @fmap
+                  respond_to do |format|
+                    format.js { render js: "window.location.href = '/fmaps/#{@fmap.id}'" }
+                  end
 		else
-			render 'new'
+                  render 'new'
 		end
 	else
 		redirect_to "/log-in"

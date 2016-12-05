@@ -245,7 +245,6 @@ function add_diamond(){
 	var diamond = new joint.shapes.basic.Diamond({
     		position: {x: 10, y: 10}});
         
-        console.log($("#modalTitleDia"))
         $("#modalTitleDia").text('Add Shape');
         document.getElementById("deleteButtonDia").style.display = "none";
 
@@ -530,39 +529,134 @@ function save_to_database_new_prep()
 {
 	$('#passNewModal').modal('show');
 }
-function save_proceed(){
-	var password = document.getElementById("pw").value;
-	var password2 = document.getElementById("pwCon").value;
-	if(password.length<8 || password!=password2)
-	{
-		alert("Map Password error. Map Password must be at least eight characters in length and match confirmation.");
-		return;
-	}
-	document.getElementById("fmap_json").value = CryptoJS.AES.encrypt(JSON.stringify(graph.toJSON()),document.getElementById("pw").value);
-	$('#passModal').modal('hide');
-        $('#saveModal').modal('show');
+
+var encrypted_save_sample = "";
+function save_proceed()
+{
+  var success = true;
+  try
+  {
+    $('#fmaps_save_families_select option').each(function(){
+      if (encrypted_save_sample == "")
+      {
+        encrypted_save_sample = $(this).text();
+      }
+      var decrypt = CryptoJS.AES.decrypt($(this).text(), document.getElementById("pw").value).toString(CryptoJS.enc.Utf8);
+      if (decrypt.length == 0)
+      {
+        decrypt = CryptoJS.AES.decrypt(encrypted_save_sample, document.getElementById("pw").value).toString(CryptoJS.enc.Utf8);
+        if (decrypt.length == 0)
+        {
+          $('#passModalLabel').html("Incorrect password, try again.").fadeIn(500).fadeOut(500).fadeIn(500);
+          $('#pw').val("").focus();
+          success = false;
+          return success;
+        } else
+        {
+          success = true
+          return success;
+        }
+      } else
+      {
+        $(this).text(decrypt);
+      }
+    });
+  }
+  catch(err)
+  {
+    try
+    {
+      var decrypt = CryptoJS.AES.decrypt(encrypted_save_sample, document.getElementById("pw").value).toString(CryptoJS.enc.Utf8);
+      if (decrypt.length == 0)
+      {
+        $('#passModalLabel').html("Incorrect password, try again.").fadeIn(500).fadeOut(500).fadeIn(500);
+        $('#pw').val("").focus();
+        success = false;
+        return success;
+      }
+    } catch(err)
+    {
+      $('#passModalLabel').html("Incorrect password, try again.").fadeIn(500).fadeOut(500).fadeIn(500);
+      $('#pw').val("").focus();
+      success = false;
+      return success;
+    }
+  }
+
+  if (success == true) {
+    document.getElementById("fmap_json").value = CryptoJS.AES.encrypt(JSON.stringify(graph.toJSON()), document.getElementById("pw").value);
+    $('#passModal').modal('hide');
+    $('#saveModal').modal('show');
+  }
 }
+
+var encrypted_save_as_sample = "";
 function save_proceed_new()
 {
-	var password = document.getElementById("pwNew").value;
-	var password2 = document.getElementById("pwConNew").value;
-	if(password.length<5 || password!=password2)
-	{
-		alert("Map Password error. Map Password must be at least eight characters in length and match confirmation.");
-		return;
-	}
-	
-	document.getElementById("new_json").value = CryptoJS.AES.encrypt(JSON.stringify(graph.toJSON()),document.getElementById("pwNew").value);
-	
-	//set default values
-	document.getElementById("new_title").value = gon.id.title;
-	document.getElementById("new_family").value = gon.id.family;
-	document.getElementById("new_extra").value = gon.id.extra;
-	document.getElementById("new_notes").value = gon.id.notes;
-	document.getElementById("new_version").value = gon.id.version;
-	$('#passNewModal').modal('hide');
-	$('#saveNewModal').modal('show');
+  var success = true;
+  try
+  {
+    $('#fmaps_save_as_families_select option').each(function(){
+      if (encrypted_save_as_sample == "")
+      {
+        encrypted_save_as_sample = $(this).text();
+      }
+      var decrypt = CryptoJS.AES.decrypt($(this).text(), document.getElementById("pwNew").value).toString(CryptoJS.enc.Utf8);
+      if (decrypt.length == 0)
+      {        
+        decrypt = CryptoJS.AES.decrypt(encrypted_save_as_sample, document.getElementById("pwNew").value).toString(CryptoJS.enc.Utf8);
+        if (decrypt.length == 0)
+        {
+          $('#passNewModalLabel').html("Incorrect password, try again.").fadeIn(500).fadeOut(500).fadeIn(500);
+          $('#pwNew').val("").focus();
+          success = false;
+          return success;
+        }
+      } else    
+      { 
+        $(this).text(decrypt);
+      } 
+    });    
+  }
+  catch(err)
+  {
+    try
+    {
+      var decrypt = CryptoJS.AES.decrypt(encrypted_save_as_sample, document.getElementById("pwNew").value).toString(CryptoJS.enc.Utf8);
+      if (decrypt.length == 0)
+      {
+        $('#passNewModalLabel').html("Incorrect password, try again.").fadeIn(500).fadeOut(500).fadeIn(500);
+        $('#pwNew').val("").focus();
+        success = false;
+        return success;
+      }
+    } catch(err)
+    {     
+      $('#passNewModalLabel').html("Incorrect password, try again.").fadeIn(500).fadeOut(500).fadeIn(500);
+      $('#pwNew').val("").focus();
+      success = false;
+      return success;
+    }
+  }     
+
+  if (success == true) 
+  {    
+    document.getElementById("new_json").value = CryptoJS.AES.encrypt(JSON.stringify(graph.toJSON()),document.getElementById("pwNew").value);
+
+    if (typeof(gon) !== "undefined")
+    {
+      //set default values
+      document.getElementById("new_title").value = gon.id.title;
+      document.getElementById("new_extra").value = gon.id.extra;
+      document.getElementById("new_notes").value = gon.id.notes;
+      document.getElementById("new_version").value = gon.id.version;
+    }
+
+    $('#passNewModal').modal('hide');
+    $('#saveNewModal').modal('show');
+  }	
 }
+
 function div_save_hide()
 {
 	$('#saveModal').modal('hide');
@@ -588,9 +682,6 @@ function save_to_database_as_new()
 	else{
 		alert('Family Map Saved');
 		$('#saveNewModal').modal('hide');
-		// Probably about here is where it would be nice to redirect
-		// to fix the issue of accidentally saving over another fmap
-		// $('#save_dropdown').show();
 	}
 }
 function getTextWidth(text, font) {

@@ -1,13 +1,19 @@
 <%= stylesheet_link_tag "bootstrap" %>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.6/css/jquery.dataTables.css"> 
 <script src="https://cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
+
+<%= render 'modals' %>
+
 <!DOCTYPE HTML>
 <div class="container">
   <div class="row">
     <h1>Manage Families</h1>
   </div>
   <div class="row">
-    <%= link_to 'Back', :back %>
+    <%= link_to 'Back to Family Map options', fmaps_options_path %>
+  </div>
+  <div class="row">
+    <%= link_to 'Home', root_path %>
   </div>
   <div class="row">
     <%= link_to 'Create a new family', { :controller => 'families', :action => 'new' } %><br><br>
@@ -15,7 +21,7 @@
   <div class="row">
     <p>Current user: <%= current_user.email %></p>
   </div>
-  <div class="row">
+  <div class="row hidden" id="families_table_div">
     <table id="families_table" class="table table-hover">
       <%= render :partial => "families_table" %>
     </table>
@@ -24,6 +30,14 @@
 
 <script>
 $(document).ready(function() {
-    $('#families_table').DataTable();
+    $('#families_table').DataTable({
+      "columnDefs": [
+        {
+          "targets": [1],
+          "visible": false,
+          "searchable": false
+        }]
+    });
+    $('#decModalFamiliesIndex').modal('show');
 } );
 </script>

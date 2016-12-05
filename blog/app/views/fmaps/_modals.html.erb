@@ -1,0 +1,49 @@
+<%= stylesheet_link_tag "bootstrap" %>
+
+<%= javascript_include_tag "aes" %>
+<%= javascript_include_tag "enc-base64-min" %>
+
+<!-- Modal for password decrypt -->
+<div class="modal fade" id="decModalFmapsIndex" tabindex="-1" role="dialog" aria-labelledby="decModalFmapsIndexLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="decModalFmapsIndexLabel">Accessing Encrypted Information</h4>
+      </div>
+      <div class="modal-body">
+                <div class="form-group">
+                        <label for="decFmapsIndex">Enter your password:</label>
+                        <input type="password" class="form-control" id="decFmapsIndex" name="decFmapsIndex"></input>
+                </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="decrypt_options()">Proceed</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="decModalFmapForm" tabindex="-1" role="dialog" aria-labelledby="decModalFmapFormLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="decModalFmapFormLabel">Accessing Encrypted Information</h4>
+      </div>
+      <div class="modal-body">
+                <div class="form-group">
+                        <label for="decFmapForm">Enter your password:</label>
+                        <input type="password" class="form-control" id="decFmapForm" name="decFmapForm"></input>
+                </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="save_proceed()">Proceed</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= javascript_include_tag "bootstrap" %>

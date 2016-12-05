@@ -1,6 +1,7 @@
 <thead>
     <tr>
         <th>Name</th>
+        <th>Encrypted Name</th>
         <th>Created At</th>
         <th>Updated At</th>
         <th>Edit</th>
@@ -8,11 +9,12 @@
         <th colspan="10"></th>
     </tr>
 </thead>
-<tbody id="scenarios-data">
+<tbody>
     <% if @families %>
         <% @families.each do |family| %>
 	  <tr>
 	    <td><%= family.name %></td>
+            <td><%= family.encrypted_name %></td>
 	    <td><%= family.created_at %></td>
 	    <td><%= family.updated_at %></td>
 	    <td><%= link_to 'Edit', edit_family_path(family) %></td>

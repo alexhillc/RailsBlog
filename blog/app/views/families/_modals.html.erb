@@ -1,0 +1,50 @@
+<%= stylesheet_link_tag "bootstrap" %>
+
+<%= javascript_include_tag "aes" %>
+<%= javascript_include_tag "enc-base64-min" %>
+
+<!-- Modal for password decrypt -->
+<div class="modal fade" id="decModalFamiliesIndex" tabindex="-1" role="dialog" aria-labelledby="decModalFamiliesIndexLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="decModalFamiliesIndexLabel">Accessing Encrypted Information</h4>
+      </div>
+      <div class="modal-body">
+                <div class="form-group">
+                        <label for="decFamiliesIndex">Enter your password:</label>
+                        <input type="password" class="form-control" id="decFamiliesIndex" name="decFamiliesIndex"></input>
+                </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="decrypt_table()">Proceed</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="decModalFamilyEdit" tabindex="-1" role="dialog" aria-labelledby="decModalFamilyEditLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="decModalFamilyEditLabel">Accessing Encrypted Information</h4>
+      </div>
+      <div class="modal-body">
+                <div class="form-group">
+                        <label for="decFamilyEdit">Enter your password:</label>
+                        <input type="password" class="form-control" id="decFamilyEdit" name="decFamilyEdit"></input>
+                </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="decrypt_form()">Proceed</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= javascript_include_tag "bootstrap" %>
+<%= javascript_include_tag "families" %>

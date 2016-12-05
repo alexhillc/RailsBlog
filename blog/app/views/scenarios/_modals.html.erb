@@ -1,0 +1,49 @@
+<%= stylesheet_link_tag "bootstrap" %>
+
+<%= javascript_include_tag "aes" %>
+<%= javascript_include_tag "enc-base64-min" %>
+
+<!-- Modal for password decrypt -->
+<div class="modal fade" id="decModalScenariosIndex" tabindex="-1" role="dialog" aria-labelledby="decModalScenariosIndexLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="decModalScenariosIndexLabel">Accessing Encrypted Information</h4>
+      </div>
+      <div class="modal-body">
+                <div class="form-group">
+                        <label for="decScenariosIndex">Enter your password:</label>
+                        <input type="password" class="form-control" id="decScenariosIndex" name="decScenariosIndex"></input>
+                </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="decrypt_options()">Proceed</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="decModalScenarioForm" tabindex="-1" role="dialog" aria-labelledby="decModalScenarioFormLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="decModalScenarioFormLabel">Accessing Encrypted Information</h4>
+      </div>
+      <div class="modal-body">
+                <div class="form-group">
+                        <label for="decScenarioForm">Enter your password:</label>
+                        <input type="password" class="form-control" id="decScenarioForm" name="decScenarioForm"></input>
+                </div>
+      </div> 
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="decrypt_form()">Proceed</button>
+      </div>
+    </div>
+  </div>
+</div>       
+
+<%= javascript_include_tag "bootstrap" %>

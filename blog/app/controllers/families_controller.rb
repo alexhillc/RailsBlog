@@ -2,15 +2,20 @@ class FamiliesController < ApplicationController
 
   def create
     if current_user
-      scenario = Scenario.new(title: "N/A", description: "N/A")
-      family = Family.new(family_params)
-      family.scenarios << scenario
-      if family.save
-        redirect_to fmaps_options_path
-        flash[:notice] = "Successfully created family."
+      if User.authenticate(current_user.email, family_params[:password])
+        scenario = Scenario.new(title: "N/A", description: "N/A")
+        family = Family.new(family_params)
+        family.scenarios << scenario
+        if family.save
+          flash[:notice] = "Successfully created family."
+          redirect_to families_path
+        else
+          flash[:alert] = "There was a problem creating this family."
+          render 'new'
+        end
       else
+        flash[:alert] = "Incorrect password entered."
         render 'new'
-        flash[:alert] = "There was a problem creating this family."
       end
     else
       redirect_to "/log-in"
@@ -35,8 +40,8 @@ class FamiliesController < ApplicationController
     if current_user
       @family = Family.find(params[:id])
       if current_user.id != @family.user_id
+        flash[:alert] = "You are not permitted to edit this family."
         redirect_to families_path
-        flash[:alert] = "You are not permitted to edit this family."  
       end
     else
       redirect_to "/log-in"
@@ -46,17 +51,22 @@ class FamiliesController < ApplicationController
   def update
     if current_user
       @family = Family.find(params[:id])
-      if current_user.id == @family.user_id
-        if @family.update(family_params)
-          redirect_to families_path
-          flash[:notice] = "Successfully updated family."
+      if User.authenticate(current_user.email, family_params[:password])
+        if current_user.id == @family.user_id
+          if @family.update(family_params)
+            flash[:notice] = "Successfully updated family."
+            redirect_to families_path
+          else
+            flash[:alert] = "There was a problem updating this family."
+            render 'edit'
+          end
         else
-          render 'edit'
-          flash[:alert] = "There was a problem updating this family."
+          flash[:alert] = "You are not permitted to update this family."
+          redirect_to families_path
         end
       else
-        redirect_to families_path
-        flash[:alert] = "You are not permitted to update this family."
+        flash[:alert] = "Incorrect password entered."
+        render 'edit'
       end
     else
       redirect_to "/log-in"
@@ -68,11 +78,11 @@ class FamiliesController < ApplicationController
       @family = Family.find(params[:id])
       if current_user.id == @family.user_id
         @family.destroy
-        redirect_to families_path
         flash[:notice] = "Successfully deleted family."
-      else
         redirect_to families_path
+      else
         flash[:alert] = "You are not permitted to delete this family."
+        redirect_to families_path
       end
     else
       redirect_to "/log-in"
@@ -81,7 +91,7 @@ class FamiliesController < ApplicationController
 
 private
   def family_params
-    params.require(:family).permit(:name, :user_id)
+    params.require(:family).permit(:encrypted_name, :user_id, :password)
   end
 
 end

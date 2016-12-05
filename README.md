@@ -1,4 +1,4 @@
-RailsBlog
-=========
+Family Interaction Map
+======================
 
-RailsBlog CS4900
+Family Interaction Map, CS4900

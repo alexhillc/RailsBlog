@@ -28,7 +28,7 @@ $( document ).ready(function() {
 	var w = $('#paper').width();
 	
 	//draw the relapse line in center of the paper
-	r_line = V('line',{x1: 0, y1: h/2, x2: w, y2: h/2, stroke: 'black'});
+	r_line = V('line',{x1: 0, y1: h * 0.75, x2: w, y2: h * 0.75, stroke: 'black'});
 	V(paper.viewport).append(r_line);
 
         $('#edit').prop('disabled', true);
@@ -733,7 +733,7 @@ function make_graph()
 	var w = $('#paper').width();
 	var h = $('#paper').height();
 	//draw the relapse line in center of the paper
-	r_line = V('line',{x1: 0, y1: h/2, x2: w, y2: h/2, stroke: 'black'});
+	r_line = V('line',{x1: 0, y1: h * 0.75, x2: w, y2: h * 0.75, stroke: 'black'});
 	V(paper.viewport).append(r_line);
 }
 function download()

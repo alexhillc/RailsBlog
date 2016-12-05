@@ -7,14 +7,14 @@ class AccountmanagementController < ApplicationController
           if current_user.try(:admin?)
             @users = User.all
           else
-            flash[:notice] = "You are not an administrator!"
+            flash[:alert] = "You are not an administrator!"
             redirect_to accountmanagement_path
           end
         end
 
 	def createaccount
 		if !current_user.try(:admin?)
-			flash[:notice] = "You are not an administrator!"
+			flash[:alert] = "You are not an administrator!"
 			redirect_to accountmanagement_path
 		end
 	end
@@ -79,6 +79,22 @@ class AccountmanagementController < ApplicationController
             else
               redirect_to accountmanagement_accounts_path
               flash[:alert] = "There was an issue unfreezing the account."
+            end
+          else
+            redirect_to accountmanagement_accounts_path
+            flash[:alert] = "You are not an administrator!"
+          end
+        end
+
+        def destroy
+          if current_user.try(:admin?)
+            user = User.find(params[:id])
+            if user.destroy
+              redirect_to accountmanagement_accounts_path
+              flash[:notice] = "Account successfully deleted."
+            else
+              redirect_to accountmanagement_accounts_path
+              flash[:alert] = "There was an issue deleting the account."
             end
           else
             redirect_to accountmanagement_accounts_path

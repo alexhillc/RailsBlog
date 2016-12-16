@@ -41,6 +41,8 @@ Rails.application.routes.draw do
   get 'accountmanagement/' => 'accountmanagement#index'
   get 'accountmanagement/updatepassword'
   post 'accountmanagement/updatepassword' => 'accountmanagement#update'
+  get 'accountmanagement/updateuserdata'
+  post 'accountmanagement/updateuserdata' => 'accountmanagement#updateuserdata'
   get 'accountmanagement/createaccount'
   post 'accountmanagement/createaccount' => 'accountmanagement#create'
   post 'password_resets/:id' => 'password_resets#update'
